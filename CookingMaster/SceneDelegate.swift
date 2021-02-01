@@ -32,6 +32,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [ingredientsTab, recipesTab, favoritesTab]
+        tabBarController.selectedIndex = 0
+        tabBarController.tabBar.backgroundColor = .white
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
