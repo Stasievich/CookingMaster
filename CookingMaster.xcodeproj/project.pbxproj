@@ -19,6 +19,8 @@
 		57C2921825BD7E52003E1164 /* RecipesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C2921725BD7E52003E1164 /* RecipesViewController.swift */; };
 		57C2921E25BD981A003E1164 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C2921D25BD981A003E1164 /* FavoritesViewController.swift */; };
 		57C2922225BD9EDD003E1164 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 57C2922125BD9EDD003E1164 /* Kingfisher */; };
+		57C2924225C6C502003E1164 /* VoiceRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C2924125C6C502003E1164 /* VoiceRecognition.swift */; };
+		57E617E225C7110F00E31EB2 /* IngredientsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E617E125C7110F00E31EB2 /* IngredientsData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		57C2921425BD7DEC003E1164 /* IngredientsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsViewController.swift; sourceTree = "<group>"; };
 		57C2921725BD7E52003E1164 /* RecipesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesViewController.swift; sourceTree = "<group>"; };
 		57C2921D25BD981A003E1164 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		57C2924125C6C502003E1164 /* VoiceRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecognition.swift; sourceTree = "<group>"; };
+		57E617E125C7110F00E31EB2 /* IngredientsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +72,8 @@
 		57C291EE25B97929003E1164 /* CookingMaster */ = {
 			isa = PBXGroup;
 			children = (
+				57E617E025C710C600E31EB2 /* Data */,
+				57C2924025C6C4BD003E1164 /* VoiceRecognition */,
 				57C2921A25BD7E62003E1164 /* API */,
 				57C2921325BD7DAD003E1164 /* ViewControllers */,
 				57C291FD25B9792B003E1164 /* Info.plist */,
@@ -98,6 +104,22 @@
 				57C2920525B97BB1003E1164 /* FoodAPI.swift */,
 			);
 			path = API;
+			sourceTree = "<group>";
+		};
+		57C2924025C6C4BD003E1164 /* VoiceRecognition */ = {
+			isa = PBXGroup;
+			children = (
+				57C2924125C6C502003E1164 /* VoiceRecognition.swift */,
+			);
+			path = VoiceRecognition;
+			sourceTree = "<group>";
+		};
+		57E617E025C710C600E31EB2 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				57E617E125C7110F00E31EB2 /* IngredientsData.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,6 +166,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 57C291E325B97929003E1164;
 			packageReferences = (
@@ -176,6 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57E617E225C7110F00E31EB2 /* IngredientsData.swift in Sources */,
 				57C2921825BD7E52003E1164 /* RecipesViewController.swift in Sources */,
 				57C2921E25BD981A003E1164 /* FavoritesViewController.swift in Sources */,
 				57C2920C25B98E84003E1164 /* UIControlExtension.swift in Sources */,
@@ -183,6 +207,7 @@
 				57C291F025B97929003E1164 /* AppDelegate.swift in Sources */,
 				57C2921525BD7DEC003E1164 /* IngredientsViewController.swift in Sources */,
 				57C2920625B97BB1003E1164 /* FoodAPI.swift in Sources */,
+				57C2924225C6C502003E1164 /* VoiceRecognition.swift in Sources */,
 				57C291F225B97929003E1164 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,6 +238,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -274,6 +300,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
