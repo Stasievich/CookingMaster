@@ -11,8 +11,11 @@ import Kingfisher
 class SharedRecipes {
     static let sharedInstance = SharedRecipes()
     var recipes = [RecipeByIngredients]()
+}
 
-    
+class FavouriteRecipes {
+    static let shared = FavouriteRecipes()
+    var recipes = [[String: Any]]()
 }
 
 
@@ -22,21 +25,23 @@ class RecipesViewController: UIViewController {
     let indent: CGFloat = 12
     let cellHeight: CGFloat = 140
     let headerText = UILabel()
+    let recipesContainer = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         SharedRecipes.sharedInstance.recipes.append(RecipeByIngredients(id: 1, title: "Some food sdfassdfasfdfasfads", image: "https://www.hackingwithswift.com/uploads/articles/shadows-2.png", usedIngredientCount: 3, missedIngredientCount: 3))
-        SharedRecipes.sharedInstance.recipes.append(RecipeByIngredients(id: 1, title: "Some food sdfasdfasfads", image: "https://koenig-media.raywenderlich.com/uploads/2019/11/CombineGettingStarted-feature.png", usedIngredientCount: 3, missedIngredientCount: 3))
-        //    UIView.animate(withDuration: TimeInterval(1)) {
-        //                //constraint change
-        //                self.view.layoutSubviews()
-        //            }
+        SharedRecipes.sharedInstance.recipes.append(RecipeByIngredients(id: 2, title: "Some food sdfasdfasfads", image: "https://koenig-media.raywenderlich.com/uploads/2019/11/CombineGettingStarted-feature.png", usedIngredientCount: 3, missedIngredientCount: 3))
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
+        navigationController?.isNavigationBarHidden = true
+        
         view.backgroundColor = .red
+        
         recipesTableView.backgroundColor = .white
         recipesTableView.separatorColor = .clear
         recipesTableView.rowHeight = cellHeight
@@ -48,14 +53,14 @@ class RecipesViewController: UIViewController {
         headerText.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(headerText)
         view.addConstraints([
-            headerText.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+            headerText.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             headerText.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
         let lblContainer = UIView()
         let lbl = UILabel()
         lbl.font = UIFont(name: "Helvetica", size: 20)
-        lbl.text = "You can make 5 recipes"
+        lbl.text = "You can make \(SharedRecipes.sharedInstance.recipes.count) recipes"
         lblContainer.frame = CGRect(x: recipesTableView.frame.minX, y: recipesTableView.frame.minY, width: recipesTableView.frame.width, height: 80)
         
         
@@ -68,16 +73,59 @@ class RecipesViewController: UIViewController {
         ])
         
         recipesTableView.tableHeaderView = lblContainer
+        
+        
+        view.addSubview(recipesContainer)
+        recipesContainer.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints([
+            recipesContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+            recipesContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            recipesContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            recipesContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        recipesContainer.addSubview(recipesTableView)
+        recipesTableView.translatesAutoresizingMaskIntoConstraints = false
+        recipesTableView.fillView(recipesContainer)
+        
+        recipesTableView.layer.cornerRadius = 10
+        recipesTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        recipesTableView.showsVerticalScrollIndicator = false
+        recipesTableView.delegate = self
+        recipesTableView.dataSource = self
+        recipesTableView.register(TableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        recipesTableView.reloadData()
+        
+    }
+}
 
-        DispatchQueue.main.async {
-            self.recipesTableView.reloadData()
-            self.view.addSubview(self.recipesTableView)
-            self.recipesTableView.frame = CGRect(x: self.view.frame.minX, y: self.view.frame.minY + 80, width: self.view.frame.width, height: self.view.frame.height - 80 - (self.tabBarController?.tabBar.frame.size.height)!)
-            self.recipesTableView.layer.cornerRadius = 10
-            self.recipesTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            self.recipesTableView.showsVerticalScrollIndicator = false
-            self.recipesTableView.register(TableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
-            self.recipesTableView.dataSource = self
+extension RecipesViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        FoodAPI.shared.getRecipeInformation(recipeId: SharedRecipes.sharedInstance.recipes[indexPath.section].id) { (data, error) in
+            guard let data = data else  { return }
+            
+            do {
+                let getRecipeInfo = try JSONDecoder().decode(RecipeDescription.self, from: data)
+                
+                DispatchQueue.main.async {
+                    
+                    let recipeDescription = RecipeDescriptionViewController()
+                    if let description = getRecipeInfo.instructions {
+                        recipeDescription.recipeDescription = description
+                    }
+                    else {
+                        recipeDescription.recipeDescription = getRecipeInfo.sourceUrl
+                    }
+                    recipeDescription.recipeName = getRecipeInfo.title
+                    recipeDescription.recipeImageName = getRecipeInfo.image
+                    
+                    self.navigationController?.pushViewController(recipeDescription, animated: true)
+                }
+            }
+            catch {
+                print(error)
+            }
         }
     }
 }
@@ -89,8 +137,40 @@ extension RecipesViewController: UITableViewDataSource {
         let recipe = SharedRecipes.sharedInstance.recipes[indexPath.section]
         let url = URL(string: recipe.image)
         
+//        cell.recipeImage.kf.cancelDownloadTask()
+        cell.mainCellView.bounds = CGRect(x: 0, y: 0, width: view.bounds.width - 2 * indent, height: cellHeight)
+//        UIApplication.shared.windows.first?.bounds.size
+        cell.mainCellView.layer.shadowColor = UIColor.gray.cgColor
+        cell.mainCellView.layer.shadowRadius = 4
+        cell.mainCellView.layer.shadowOpacity = 1
+        cell.mainCellView.layer.shadowOffset = .zero
+        cell.mainCellView.layer.shadowPath = UIBezierPath(rect: cell.mainCellView.bounds).cgPath
+        
         cell.recipeImage.kf.setImage(with: url)
         cell.recipeName.text = recipe.title
+        
+        let fav = FavouriteRecipes.shared.recipes.map { (recipe) -> Int in
+            recipe["id"] as! Int
+        }.contains(recipe.id)
+        
+        if fav == false {
+            cell.heartButton.setBackgroundImage(UIImage(named: "favorite"), for: .normal)
+        }
+        else {
+            cell.heartButton.setBackgroundImage(UIImage(named: "favorite-painted-over"), for: .normal)
+        }
+        
+        cell.heartButton.addAction(for: .touchUpInside) { (heartButton) in
+            print(FavouriteRecipes.shared.recipes.count)
+            if fav == true {
+                FirebaseManager.shared.remove(id: String(recipe.id))
+                cell.heartButton.setBackgroundImage(UIImage(named: "favorite"), for: .normal)
+            }
+            else {
+                FirebaseManager.shared.saveRecipe(recipe: recipe)
+                cell.heartButton.setBackgroundImage(UIImage(named: "favorite-painted-over"), for: .normal)
+            }
+        }
         
         return cell
     }
@@ -99,7 +179,7 @@ extension RecipesViewController: UITableViewDataSource {
         return 1
     }
     
-    private func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    internal func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return .leastNormalMagnitude
     }
     
@@ -111,6 +191,14 @@ extension RecipesViewController: UITableViewDataSource {
 class TableViewCell: UITableViewCell {
     let indent: CGFloat = 12
     let cellHeight: CGFloat = 140
+    var favorite: Bool = false
+    
+    var heartButton: UIButton = {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setBackgroundImage(UIImage(named: "favorite"), for: .normal)
+        return btn
+    }()
     
     var recipeImage: UIImageView = {
         let img = UIImageView()
@@ -138,7 +226,6 @@ class TableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layer.backgroundColor = UIColor.clear.cgColor
         
-        mainCellView.layer.bounds = CGRect(x: bounds.minX, y: bounds.minY, width: bounds.size.width - 2 * indent, height: cellHeight)
         mainCellView.backgroundColor = .white
         mainCellView.layer.cornerRadius = 8
         recipeImage.layer.cornerRadius = 8
@@ -146,6 +233,7 @@ class TableViewCell: UITableViewCell {
         self.contentView.addSubview(mainCellView)
         mainCellView.addSubview(recipeImage)
         mainCellView.addSubview(recipeName)
+        mainCellView.addSubview(heartButton)
         
         contentView.addConstraints([
             mainCellView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: indent),
@@ -166,14 +254,12 @@ class TableViewCell: UITableViewCell {
             recipeName.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -20)
         ])
         
-        
-        
-        mainCellView.layer.shadowColor = UIColor.gray.cgColor
-        mainCellView.layer.shadowRadius = 5
-        mainCellView.layer.shadowOpacity = 1
-        mainCellView.layer.shadowOffset = .zero
-        mainCellView.layer.shadowPath = UIBezierPath(rect: mainCellView.layer.bounds).cgPath
-        
+        mainCellView.addConstraints([
+            heartButton.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor),
+            heartButton.topAnchor.constraint(equalTo: mainCellView.topAnchor),
+            heartButton.heightAnchor.constraint(equalToConstant: 20),
+            heartButton.widthAnchor.constraint(equalToConstant: 20)
+        ])
     }
     
     required init?(coder: NSCoder) {

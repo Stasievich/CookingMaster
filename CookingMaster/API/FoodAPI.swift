@@ -80,4 +80,33 @@ class FoodAPI {
         dataTask.resume()
     }
     
+    
+    func getRecipeInformation(recipeId: Int, completion: @escaping (Data?, Error?) -> Void) {
+        let headers = [
+            "x-rapidapi-key": "ab94af265fmsh9ad57a776c71a9dp1c97a8jsn2625aa125597",
+            "x-rapidapi-host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com"
+        ]
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com"
+        components.path = "/recipes/\(recipeId)/information"
+        
+        var request = URLRequest(url: components.url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = headers
+
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest) { (data, response, error) -> Void in
+            if (error != nil) {
+                print(error)
+            } else {
+                let httpResponse = response as? HTTPURLResponse
+                print(httpResponse)
+                completion(data, error)
+            }
+        }
+
+        dataTask.resume()
+    }
+    
 }

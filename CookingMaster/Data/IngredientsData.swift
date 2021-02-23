@@ -18,7 +18,7 @@ struct ItemInCategory: Hashable {
 
 class IngredientsData {
     static let data = IngredientsData()
-    let ingredients : [Ingredients] = [
+    var ingredients : [Ingredients] = [
         Ingredients(category: "Dairy", itemsInCategory: [ItemInCategory(item: "milk"), ItemInCategory(item: "eggs")]),
         Ingredients(category: "Meat", itemsInCategory: [ItemInCategory(item: "pork"), ItemInCategory(item: "beef")])
     ]

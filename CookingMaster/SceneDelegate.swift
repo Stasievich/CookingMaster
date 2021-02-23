@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -30,11 +31,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         favoritesTab.tabBarItem.title = "Favorites"
         favoritesTab.tabBarItem.image = UIImage(named: "favorite")
         
+        DispatchQueue.main.async {
+            
+            if let uid = Auth.auth().currentUser?.uid {
+                FirebaseManager.shared.getUserData(uid: uid) { (result) in
+                    FavouriteRecipes.shared.recipes = result
+                }
+            }
+        }
+        
+        DBParser().getCSVData()
+        
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [ingredientsTab, recipesTab, favoritesTab]
         tabBarController.selectedIndex = 0
         tabBarController.tabBar.backgroundColor = .white
-        window?.rootViewController = tabBarController
+        
+        window?.rootViewController = UINavigationController(rootViewController: tabBarController)
         window?.makeKeyAndVisible()
     }
 
@@ -68,4 +81,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-
