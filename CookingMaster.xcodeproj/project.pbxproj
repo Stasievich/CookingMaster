@@ -13,6 +13,7 @@
 		575FFC3025D97242007E681D /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC2F25D97242007E681D /* FirebaseManager.swift */; };
 		575FFC4525DABB1A007E681D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC4425DABB1A007E681D /* LoginViewController.swift */; };
 		57A129A325E477F7009173A5 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A129A225E477F7009173A5 /* UIViewExtension.swift */; };
+		57A129A625E556D1009173A5 /* CurrentUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A129A525E556D1009173A5 /* CurrentUserViewController.swift */; };
 		57C291F025B97929003E1164 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C291EF25B97929003E1164 /* AppDelegate.swift */; };
 		57C291F225B97929003E1164 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C291F125B97929003E1164 /* SceneDelegate.swift */; };
 		57C291F725B97929003E1164 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C291F525B97929003E1164 /* Main.storyboard */; };
@@ -41,6 +42,7 @@
 		575FFC2F25D97242007E681D /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		575FFC4425DABB1A007E681D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		57A129A225E477F7009173A5 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		57A129A525E556D1009173A5 /* CurrentUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserViewController.swift; sourceTree = "<group>"; };
 		57C291EC25B97929003E1164 /* CookingMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookingMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C291EF25B97929003E1164 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57C291F125B97929003E1164 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				575FFC0325D8464A007E681D /* SignUpViewController.swift */,
 				575FFC4425DABB1A007E681D /* LoginViewController.swift */,
 				57C82A9925E28A4D00988CB9 /* RecipeDescriptionViewController.swift */,
+				57A129A525E556D1009173A5 /* CurrentUserViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				57C2920625B97BB1003E1164 /* FoodAPI.swift in Sources */,
 				57C2924225C6C502003E1164 /* VoiceRecognition.swift in Sources */,
 				57C291F225B97929003E1164 /* SceneDelegate.swift in Sources */,
+				57A129A625E556D1009173A5 /* CurrentUserViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

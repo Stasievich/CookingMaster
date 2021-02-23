@@ -13,7 +13,7 @@ class FavoritesViewController: UIViewController {
     var recipesContainer = UIView()
     var promptForSignUpLabel = UILabel()
     var signUpButton = UIButton(type: .system)
-    var signOutButton = UIButton(type: .system)
+    var userButton = UIButton(type: .system)
     
     var recipesTableView = UITableView.init(frame: .zero, style: .grouped)
     let cellReuseIdentifier = "favRecipe"
@@ -37,26 +37,27 @@ class FavoritesViewController: UIViewController {
             headerText.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
-        signOutButton.translatesAutoresizingMaskIntoConstraints = false
-        signOutButton.setTitle("Sign Out", for: .normal)
-        view.addSubview(signOutButton)
+        userButton.translatesAutoresizingMaskIntoConstraints = false
+        userButton.setBackgroundImage(UIImage(named: "key"), for: .normal)
+        view.addSubview(userButton)
         view.addConstraints([
-            signOutButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            signOutButton.centerYAnchor.constraint(equalTo: headerText.centerYAnchor)
+            userButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            userButton.centerYAnchor.constraint(equalTo: headerText.centerYAnchor),
+            userButton.widthAnchor.constraint(equalToConstant: 30),
+            userButton.heightAnchor.constraint(equalToConstant: 30)
         ])
+        userButton.backgroundColor = .white
+        userButton.layer.cornerRadius = 15
         
-        signOutButton.addAction(for: .touchUpInside) { (signOutButton) in
-            do {
-                try Auth.auth().signOut()
-            } catch let signOutError as NSError {
-              print ("Error signing out: %@", signOutError)
+        userButton.addAction(for: .touchUpInside) { (signOutButton) in
+            if Auth.auth().currentUser == nil {
+                let signUpVC = SignUpViewController()
+                self.navigationController?.pushViewController(signUpVC, animated: true)
             }
-            print(self.tabBarController?.selectedIndex)
-            let favoritesTab = FavoritesViewController()
-            favoritesTab.tabBarItem.title = "Favorites"
-            favoritesTab.tabBarItem.image = UIImage(named: "favorite")
-            self.tabBarController?.viewControllers?.append(favoritesTab)
-            self.tabBarController?.viewControllers?.remove(at: 2)
+            else {
+                let currentUserViewController = CurrentUserViewController()
+                self.navigationController?.pushViewController(currentUserViewController, animated: true)
+            }
         }
         
         view.addSubview(recipesContainer)

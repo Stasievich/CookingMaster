@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import Firebase
 
 class SharedRecipes {
     static let sharedInstance = SharedRecipes()
@@ -26,6 +27,7 @@ class RecipesViewController: UIViewController {
     let cellHeight: CGFloat = 140
     let headerText = UILabel()
     let recipesContainer = UIView()
+    let userButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +58,29 @@ class RecipesViewController: UIViewController {
             headerText.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             headerText.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
+        
+        userButton.translatesAutoresizingMaskIntoConstraints = false
+        userButton.setBackgroundImage(UIImage(named: "key"), for: .normal)
+        view.addSubview(userButton)
+        view.addConstraints([
+            userButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            userButton.centerYAnchor.constraint(equalTo: headerText.centerYAnchor),
+            userButton.widthAnchor.constraint(equalToConstant: 30),
+            userButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
+        userButton.backgroundColor = .white
+        userButton.layer.cornerRadius = 15
+        
+        userButton.addAction(for: .touchUpInside) { (signOutButton) in
+            if Auth.auth().currentUser == nil {
+                let signUpVC = SignUpViewController()
+                self.navigationController?.pushViewController(signUpVC, animated: true)
+            }
+            else {
+                let currentUserViewController = CurrentUserViewController()
+                self.navigationController?.pushViewController(currentUserViewController, animated: true)
+            }
+        }
         
         let lblContainer = UIView()
         let lbl = UILabel()
