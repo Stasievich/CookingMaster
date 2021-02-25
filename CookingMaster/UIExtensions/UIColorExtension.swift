@@ -16,5 +16,8 @@ extension UIColor {
         static var buttonColor: UIColor {
             return #colorLiteral(red: 0, green: 0.8527466655, blue: 0, alpha: 1)
         }
+        static var recipeTextColor: UIColor {
+            return #colorLiteral(red: 0.8064470887, green: 0.8808635473, blue: 0.9482396245, alpha: 1)
+        }
     }
 }

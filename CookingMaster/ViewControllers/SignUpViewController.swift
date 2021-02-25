@@ -30,6 +30,8 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
+        
+        self.addBackButton()
 
         signUpContainer.backgroundColor = .white
         signUpContainer.layer.cornerRadius = 8
@@ -118,7 +120,7 @@ class SignUpViewController: UIViewController {
             cookButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
             cookButton.widthAnchor.constraint(equalToConstant: view.frame.width)
         ])
-        cookButton.backgroundColor = .red
+        cookButton.backgroundColor = UIColor.Theme.buttonColor
         cookButton.setTitleColor(.white, for: .normal)
         
         cookButton.addAction(for: .touchUpInside) { (cookButton) in
@@ -145,6 +147,7 @@ class SignUpViewController: UIViewController {
         loginButton.setTitle("Login", for: .normal)
         view.addSubview(loginButton)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
+        loginButton.setTitleColor(UIColor.Theme.mainColor, for: .normal)
         view.addConstraints([
             loginButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
@@ -206,6 +209,9 @@ class SignUpViewController: UIViewController {
         return true
     }
 
-   
+    @objc
+    func backButtonTapped() {
+        self.navigationController?.popViewController(animated: true)
+    }
 
 }

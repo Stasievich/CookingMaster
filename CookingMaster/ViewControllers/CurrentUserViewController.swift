@@ -19,6 +19,7 @@ class CurrentUserViewController: UIViewController {
     override func viewDidLoad () {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
+        self.addBackButton()
         
         if let userEmail = Auth.auth().currentUser?.email {
             emailTextField.text = "\(userEmail)"

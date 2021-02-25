@@ -162,6 +162,7 @@ extension FavoritesViewController: UITableViewDelegate {
                     }
                     recipeDescription.recipeName = getRecipeInfo.title
                     recipeDescription.recipeImageName = getRecipeInfo.image
+                    recipeDescription.recipeStringTags = getRecipeInfo.getPositiveTags()
                     
                     self.navigationController?.pushViewController(recipeDescription, animated: true)
                 }
@@ -227,6 +228,7 @@ class FavoritesTableViewCell: UITableViewCell {
     let indent: CGFloat = 12
     let cellHeight: CGFloat = 140
     var favorite: Bool = false
+    let reuseId = "cell"
     
     var deleteButton: UIButton = {
         let btn = UIButton()
@@ -256,6 +258,7 @@ class FavoritesTableViewCell: UITableViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -265,10 +268,14 @@ class FavoritesTableViewCell: UITableViewCell {
         mainCellView.layer.cornerRadius = 8
         recipeImage.layer.cornerRadius = 8
         recipeImage.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        
+        
         self.contentView.addSubview(mainCellView)
         mainCellView.addSubview(recipeImage)
         mainCellView.addSubview(recipeName)
         mainCellView.addSubview(deleteButton)
+        
+        
         
         contentView.addConstraints([
             mainCellView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: indent),
@@ -290,6 +297,7 @@ class FavoritesTableViewCell: UITableViewCell {
             recipeName.topAnchor.constraint(equalTo: mainCellView.topAnchor, constant: 5)
         ])
         
+        
         mainCellView.addConstraints([
             deleteButton.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -5),
             deleteButton.topAnchor.constraint(equalTo: mainCellView.topAnchor, constant: 5),
@@ -302,3 +310,5 @@ class FavoritesTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+

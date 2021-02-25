@@ -38,8 +38,8 @@ class RecipesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        SharedRecipes.sharedInstance.recipes.append(RecipeByIngredients(id: 1, title: "Some food sdfassdfasfdfasfads", image: "https://www.hackingwithswift.com/uploads/articles/shadows-2.png", usedIngredientCount: 3, missedIngredientCount: 3))
-        SharedRecipes.sharedInstance.recipes.append(RecipeByIngredients(id: 2, title: "Some food sdfasdfasfads", image: "https://koenig-media.raywenderlich.com/uploads/2019/11/CombineGettingStarted-feature.png", usedIngredientCount: 3, missedIngredientCount: 3))
+//        SharedRecipes.sharedInstance.recipes.append(RecipeByIngredients(id: 1, title: "Some food sdfassdfasfdfasfads", image: "https://www.hackingwithswift.com/uploads/articles/shadows-2.png", usedIngredientCount: 3, missedIngredientCount: 3))
+//        SharedRecipes.sharedInstance.recipes.append(RecipeByIngredients(id: 2, title: "Some food sdfasdfasfads", image: "https://koenig-media.raywenderlich.com/uploads/2019/11/CombineGettingStarted-feature.png", usedIngredientCount: 3, missedIngredientCount: 3))
         
     }
     
@@ -192,6 +192,7 @@ extension RecipesViewController: UITableViewDelegate {
                     }
                     recipeDescription.recipeName = getRecipeInfo.title
                     recipeDescription.recipeImageName = getRecipeInfo.image
+                    recipeDescription.recipeStringTags = getRecipeInfo.getPositiveTags()
                     
                     self.navigationController?.pushViewController(recipeDescription, animated: true)
                 }
