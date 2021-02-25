@@ -137,6 +137,7 @@ class LoginViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         navigationController?.setNavigationBarHidden(false, animated: true)
+//        navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = .lightGray
     }
     

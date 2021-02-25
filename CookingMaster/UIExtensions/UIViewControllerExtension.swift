@@ -14,7 +14,7 @@ extension UIViewController {
     
     func addBackButton() {
         let backButton: UIButton = UIButton()
-        let image = UIImage(named: "previous")
+        let image = UIImage(named: "previous")?.withTintColor(UIColor.Theme.mainColor)
         backButton.setImage(image, for: .normal)
         backButton.sizeToFit()
         backButton.addAction(for: .touchUpInside) { (btnLeftMenu) in

@@ -32,6 +32,7 @@ class RecipesViewController: UIViewController {
     let recipesContainer = UIView()
     let userButton = UIButton()
     
+    let recipeBookImage = UIImageView()
     let promptForAddIngredientsLabel = UILabel()
     let addIngredientsButton = UIButton()
     
@@ -102,6 +103,19 @@ class RecipesViewController: UIViewController {
         
         if SharedRecipes.sharedInstance.recipes.isEmpty {
             
+            recipeBookImage.translatesAutoresizingMaskIntoConstraints = false
+            recipeBookImage.image = UIImage(named: "recipeBook")
+            recipesContainer.addSubview(recipeBookImage)
+            recipesContainer.addConstraints([
+                recipeBookImage.topAnchor.constraint(equalTo: recipesContainer.topAnchor, constant: 60),
+                recipeBookImage.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
+                recipeBookImage.widthAnchor.constraint(equalToConstant: 50),
+                recipeBookImage.heightAnchor.constraint(equalToConstant: 50)
+            ])
+            
+            
+            
+            
             promptForAddIngredientsLabel.translatesAutoresizingMaskIntoConstraints = false
             promptForAddIngredientsLabel.text = "Add your ingredients to get started"
             promptForAddIngredientsLabel.font = UIFont(name: "Helvetica", size: 14)
@@ -109,7 +123,7 @@ class RecipesViewController: UIViewController {
             promptForAddIngredientsLabel.textAlignment = .center
             recipesContainer.addSubview(promptForAddIngredientsLabel)
             recipesContainer.addConstraints([
-                promptForAddIngredientsLabel.topAnchor.constraint(equalTo: recipesContainer.topAnchor, constant: 60),
+                promptForAddIngredientsLabel.topAnchor.constraint(equalTo: recipeBookImage.bottomAnchor, constant: 20),
                 promptForAddIngredientsLabel.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
                 promptForAddIngredientsLabel.widthAnchor.constraint(equalToConstant: 140.0)
             ])
@@ -133,40 +147,40 @@ class RecipesViewController: UIViewController {
         }
         
         else {
-        
-        
-        
-        let lblContainer = UIView()
-        let lbl = UILabel()
-        lbl.font = UIFont(name: "Helvetica", size: 20)
-        lbl.text = "You can make \(SharedRecipes.sharedInstance.recipes.count) recipes"
-        lblContainer.frame = CGRect(x: recipesTableView.frame.minX, y: recipesTableView.frame.minY, width: recipesTableView.frame.width, height: 80)
-        
-        
-        lblContainer.addSubview(lbl)
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lblContainer.addConstraints([
-            lbl.leadingAnchor.constraint(equalTo: lblContainer.leadingAnchor, constant: indent),
-            lbl.centerYAnchor.constraint(equalTo: lblContainer.centerYAnchor),
-            lbl.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        recipesTableView.tableHeaderView = lblContainer
-        
-        
-        
-        
-        recipesContainer.addSubview(recipesTableView)
-        recipesTableView.translatesAutoresizingMaskIntoConstraints = false
-        recipesTableView.fillView(recipesContainer)
-        
-        recipesTableView.layer.cornerRadius = 10
-        recipesTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        recipesTableView.showsVerticalScrollIndicator = false
-        recipesTableView.delegate = self
-        recipesTableView.dataSource = self
-        recipesTableView.register(TableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-        recipesTableView.reloadData()
+            
+            
+            
+            let lblContainer = UIView()
+            let lbl = UILabel()
+            lbl.font = UIFont(name: "Helvetica", size: 20)
+            lbl.text = "You can make \(SharedRecipes.sharedInstance.recipes.count) recipes"
+            lblContainer.frame = CGRect(x: recipesTableView.frame.minX, y: recipesTableView.frame.minY, width: recipesTableView.frame.width, height: 80)
+            
+            
+            lblContainer.addSubview(lbl)
+            lbl.translatesAutoresizingMaskIntoConstraints = false
+            lblContainer.addConstraints([
+                lbl.leadingAnchor.constraint(equalTo: lblContainer.leadingAnchor, constant: indent),
+                lbl.centerYAnchor.constraint(equalTo: lblContainer.centerYAnchor),
+                lbl.heightAnchor.constraint(equalToConstant: 50)
+            ])
+            
+            recipesTableView.tableHeaderView = lblContainer
+            
+            
+            
+            
+            recipesContainer.addSubview(recipesTableView)
+            recipesTableView.translatesAutoresizingMaskIntoConstraints = false
+            recipesTableView.fillView(recipesContainer)
+            
+            recipesTableView.layer.cornerRadius = 10
+            recipesTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            recipesTableView.showsVerticalScrollIndicator = false
+            recipesTableView.delegate = self
+            recipesTableView.dataSource = self
+            recipesTableView.register(TableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+            recipesTableView.reloadData()
         }
         
     }
@@ -222,6 +236,10 @@ extension RecipesViewController: UITableViewDataSource {
         
         cell.recipeImage.kf.setImage(with: url)
         cell.recipeName.text = recipe.title
+//        cell.recipeName.font = UIFont(name: "AppleSDGothicNeo", size: 18)
+        cell.usedIngredientsCountLabel.text = "You have all \(recipe.usedIngredientCount) ingredients"
+//        cell.usedIngredientsCountLabel.font = UIFont(name: "AppleSDGothicNeo", size: 8)
+//        cell.usedIngredientsCountLabel.textColor = .gray
         
         let fav = FavouriteRecipes.shared.recipes.map { (recipe) -> Int in
             recipe["id"] as! Int
@@ -303,9 +321,17 @@ class TableViewCell: UITableViewCell {
     
     var recipeName: UILabel = {
         let lbl = UILabel()
-        lbl.font = UIFont(name: "AppleSDGothicNeo", size: 18)
+        lbl.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 18)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.numberOfLines = 0
+        return lbl
+    }()
+    
+    var usedIngredientsCountLabel: UILabel = {
+       let lbl = UILabel()
+        lbl.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 11)
+        lbl.textColor = .gray
+        lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
     
@@ -326,6 +352,7 @@ class TableViewCell: UITableViewCell {
         self.contentView.addSubview(mainCellView)
         mainCellView.addSubview(recipeImage)
         mainCellView.addSubview(recipeName)
+        mainCellView.addSubview(usedIngredientsCountLabel)
         mainCellView.addSubview(heartButton)
         
         contentView.addConstraints([
@@ -346,6 +373,12 @@ class TableViewCell: UITableViewCell {
             recipeName.leadingAnchor.constraint(equalTo: recipeImage.trailingAnchor, constant: 20),
             recipeName.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -30),
             recipeName.topAnchor.constraint(equalTo: mainCellView.topAnchor, constant: 5)
+        ])
+        
+        mainCellView.addConstraints([
+            usedIngredientsCountLabel.leadingAnchor.constraint(equalTo: recipeImage.trailingAnchor, constant: 20),
+            usedIngredientsCountLabel.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -30),
+            usedIngredientsCountLabel.bottomAnchor.constraint(equalTo: mainCellView.bottomAnchor, constant: -5)
         ])
         
         mainCellView.addConstraints([

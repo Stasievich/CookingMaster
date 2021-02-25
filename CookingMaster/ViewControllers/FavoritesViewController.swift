@@ -12,6 +12,7 @@ class FavoritesViewController: UIViewController {
     var headerText = UILabel()
     var recipesContainer = UIView()
     var promptForSignUpLabel = UILabel()
+    var recipeBookImage = UIImageView()
     var signUpButton = UIButton()
     var userButton = UIButton(type: .system)
     
@@ -75,6 +76,16 @@ class FavoritesViewController: UIViewController {
         
         if Auth.auth().currentUser == nil {
             
+            recipeBookImage.translatesAutoresizingMaskIntoConstraints = false
+            recipeBookImage.image = UIImage(named: "recipeBook")
+            recipesContainer.addSubview(recipeBookImage)
+            recipesContainer.addConstraints([
+                recipeBookImage.topAnchor.constraint(equalTo: recipesContainer.topAnchor, constant: 60),
+                recipeBookImage.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
+                recipeBookImage.widthAnchor.constraint(equalToConstant: 50),
+                recipeBookImage.heightAnchor.constraint(equalToConstant: 50)
+            ])
+            
             promptForSignUpLabel.translatesAutoresizingMaskIntoConstraints = false
             promptForSignUpLabel.text = "Only registered users can save recipes"
             promptForSignUpLabel.font = UIFont(name: "Helvetica", size: 14)
@@ -82,7 +93,7 @@ class FavoritesViewController: UIViewController {
             promptForSignUpLabel.textAlignment = .center
             recipesContainer.addSubview(promptForSignUpLabel)
             recipesContainer.addConstraints([
-                promptForSignUpLabel.topAnchor.constraint(equalTo: recipesContainer.topAnchor, constant: 60),
+                promptForSignUpLabel.topAnchor.constraint(equalTo: recipeBookImage.bottomAnchor, constant: 20),
                 promptForSignUpLabel.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
                 promptForSignUpLabel.widthAnchor.constraint(equalToConstant: 140.0)
             ])
@@ -247,7 +258,7 @@ class FavoritesTableViewCell: UITableViewCell {
     
     var recipeName: UILabel = {
         let lbl = UILabel()
-        lbl.font = UIFont(name: "AppleSDGothicNeo", size: 18)
+        lbl.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 18)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.numberOfLines = 0
         return lbl

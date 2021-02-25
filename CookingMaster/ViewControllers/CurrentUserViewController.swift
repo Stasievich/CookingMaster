@@ -12,6 +12,7 @@ import Firebase
 class CurrentUserViewController: UIViewController {
     var productLabel = UILabel()
     var emailTextField = TextField()
+    var appTitleLabel = UILabel()
     
     var signOutButton = UIButton(type: .system)
     var changePasswordButton = UIButton(type: .system)
@@ -43,7 +44,19 @@ class CurrentUserViewController: UIViewController {
         emailTextField.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         emailTextField.autocorrectionType = .no
         
-        
+        view.addSubview(appTitleLabel)
+        let str = "CookingMaster"
+        let titleString = NSMutableAttributedString(string: str, attributes: [NSAttributedString.Key.font: UIFont(name: "GillSans-Bold", size: 26)!])
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: #colorLiteral(red: 0.8284265995, green: 0.2433997393, blue: 0.5355008841, alpha: 1), range: NSRange(location:0,length:7))
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.Theme.mainColor, range: NSRange(location:7,length:str.count - 7))
+        appTitleLabel.attributedText = titleString
+        appTitleLabel.textAlignment = .center
+        appTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints([
+            appTitleLabel.widthAnchor.constraint(equalTo: emailTextField.widthAnchor),
+            appTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            appTitleLabel.bottomAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -20)
+        ])
         
         signOutButton.setTitle("Sign out", for: .normal)
         view.addSubview(signOutButton)

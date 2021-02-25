@@ -14,7 +14,8 @@ import Firebase
 class IngredientsViewController: UIViewController {
 
     var recipes = [RecipeByIngredients]()
-    var searchByChosenIngredientsButton = UIButton(type: .system)
+    var searchByChosenIngredientsButton = UIButton()
+    var clearPantry = UIButton()
     var ingredients = [String]()
     let headerText = UILabel()
     
@@ -137,6 +138,21 @@ class IngredientsViewController: UIViewController {
             searchByChosenIngredientsButton.widthAnchor.constraint(equalToConstant: view.frame.width / 2 - 20),
         ])
         
+        searchRecipesByChosenIngredientsContainer.addSubview(clearPantry)
+        clearPantry.translatesAutoresizingMaskIntoConstraints = false
+        clearPantry.setTitle("Clear pantry", for: .normal)
+        clearPantry.setTitleColor(.gray, for: .normal)
+        clearPantry.backgroundColor = UIColor(cgColor: CGColor(gray: 0.9, alpha: 1))
+        clearPantry.layer.cornerRadius = 5
+        searchRecipesByChosenIngredientsContainer.addConstraints([
+            clearPantry.topAnchor.constraint(equalTo: searchRecipesByChosenIngredientsContainer.topAnchor, constant: 10),
+            clearPantry.heightAnchor.constraint(equalToConstant: 30),
+            clearPantry.leadingAnchor.constraint(equalTo: searchRecipesByChosenIngredientsContainer.leadingAnchor, constant: 10),
+            clearPantry.widthAnchor.constraint(equalToConstant: view.frame.width / 2 - 20),
+        ])
+        
+        
+        
         let searchRecipesByVoiceContainer = UIView()
         view.addSubview(searchRecipesByVoiceContainer)
         searchRecipesByVoiceContainer.backgroundColor = .white
@@ -212,7 +228,7 @@ class IngredientsViewController: UIViewController {
             (cell, indexPath, headerItem) in
             
             cell.label.text = headerItem.category
-            cell.backgroundView?.backgroundColor = .cyan
+            cell.image.image = UIImage(named: headerItem.category)
             
         }
         
@@ -323,6 +339,20 @@ class IngredientsViewController: UIViewController {
             self.getRecipes()
         }
         
+        clearPantry.addAction(for: .touchUpInside) { (clearPantry) in
+            let alert = UIAlertController(title: "CookingMaster", message: "Are you sure you want to remove all your ingredients?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "NO", style: .default))
+            alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (alert) in
+                let selectedItems = ingredientsCollectionView.indexPathsForSelectedItems
+                if let items = selectedItems {
+                    for indexPath in items {
+                        ingredientsCollectionView.deselectItem(at: indexPath, animated:true)
+                    }
+                }
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+        
     }
 }
 
@@ -376,6 +406,7 @@ class IngredientsViewCell: UICollectionViewCell {
 
 class HeaderViewCell: UICollectionViewListCell {
     let label = UILabel()
+    let image = UIImageView()
     let headerDisclosureOption = UICellAccessory.OutlineDisclosureOptions(style: .header, tintColor: UIColor.Theme.mainColor)
     
     required init?(coder: NSCoder) {
@@ -389,12 +420,21 @@ class HeaderViewCell: UICollectionViewListCell {
         
         accessories = [.outlineDisclosure(options: headerDisclosureOption)]
         
+        contentView.addSubview(image)
+        image.translatesAutoresizingMaskIntoConstraints = false
+//        image.image = UIImage(named: "")
+        image.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+        image.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
+        image.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant:  -8).isActive = true
+        image.widthAnchor.constraint(equalToConstant: 34).isActive = true
+        
+        
         contentView.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 12)
         label.textColor = .white
         label.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
-        label.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
+        label.leadingAnchor.constraint(equalTo: image.safeAreaLayoutGuide.trailingAnchor, constant: 20).isActive = true
         label.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant:  -8).isActive = true
         label.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
         

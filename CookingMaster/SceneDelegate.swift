@@ -48,7 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarController.tabBar.backgroundColor = .white
         
         let rootViewController = UINavigationController(rootViewController: tabBarController)
-        rootViewController.navigationBar.tintColor = UIColor.Theme.mainColor
+        rootViewController.navigationBar.prefersLargeTitles = true
         
         rootViewController.addBackButton()
         window?.rootViewController = rootViewController
