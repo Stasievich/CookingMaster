@@ -23,11 +23,17 @@ class FavouriteRecipes {
 class RecipesViewController: UIViewController {
     var recipesTableView = UITableView.init(frame: .zero, style: .grouped)
     let cellReuseIdentifier = "recipe"
+    let favoriteImage = UIImage(named: "favorite")?.withTintColor(UIColor.Theme.mainColor)
+    let favoritePaintedOverImage = UIImage(named: "favorite-painted-over")?.withTintColor(UIColor.Theme.mainColor)
+    
     let indent: CGFloat = 12
     let cellHeight: CGFloat = 140
     let headerText = UILabel()
     let recipesContainer = UIView()
     let userButton = UIButton()
+    
+    let promptForAddIngredientsLabel = UILabel()
+    let addIngredientsButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +48,7 @@ class RecipesViewController: UIViewController {
         
         navigationController?.isNavigationBarHidden = true
         
-        view.backgroundColor = .red
+        view.backgroundColor = UIColor.Theme.mainColor
         
         recipesTableView.backgroundColor = .white
         recipesTableView.separatorColor = .clear
@@ -82,6 +88,54 @@ class RecipesViewController: UIViewController {
             }
         }
         
+        view.addSubview(recipesContainer)
+        recipesContainer.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints([
+            recipesContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+            recipesContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            recipesContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            recipesContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        recipesContainer.backgroundColor = .white
+        recipesContainer.layer.cornerRadius = 10
+        recipesContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        if SharedRecipes.sharedInstance.recipes.isEmpty {
+            
+            promptForAddIngredientsLabel.translatesAutoresizingMaskIntoConstraints = false
+            promptForAddIngredientsLabel.text = "Add your ingredients to get started"
+            promptForAddIngredientsLabel.font = UIFont(name: "Helvetica", size: 14)
+            promptForAddIngredientsLabel.numberOfLines = 2
+            promptForAddIngredientsLabel.textAlignment = .center
+            recipesContainer.addSubview(promptForAddIngredientsLabel)
+            recipesContainer.addConstraints([
+                promptForAddIngredientsLabel.topAnchor.constraint(equalTo: recipesContainer.topAnchor, constant: 60),
+                promptForAddIngredientsLabel.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
+                promptForAddIngredientsLabel.widthAnchor.constraint(equalToConstant: 140.0)
+            ])
+            
+            addIngredientsButton.translatesAutoresizingMaskIntoConstraints = false
+            addIngredientsButton.setTitle("Add ingredients", for: .normal)
+            addIngredientsButton.titleLabel?.textAlignment = .center
+            addIngredientsButton.setButtonToMainTheme()
+            recipesContainer.addSubview(addIngredientsButton)
+            recipesContainer.addConstraints([
+                addIngredientsButton.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
+                addIngredientsButton.topAnchor.constraint(equalTo: promptForAddIngredientsLabel.bottomAnchor, constant: 20),
+                addIngredientsButton.widthAnchor.constraint(equalToConstant: 150)
+            ])
+            
+            addIngredientsButton.addAction(for: .touchUpInside) { (addIngredientsButton) in
+                self.tabBarController?.selectedIndex = 0
+            }
+            
+            
+        }
+        
+        else {
+        
+        
+        
         let lblContainer = UIView()
         let lbl = UILabel()
         lbl.font = UIFont(name: "Helvetica", size: 20)
@@ -100,14 +154,7 @@ class RecipesViewController: UIViewController {
         recipesTableView.tableHeaderView = lblContainer
         
         
-        view.addSubview(recipesContainer)
-        recipesContainer.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraints([
-            recipesContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
-            recipesContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            recipesContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            recipesContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        
         
         recipesContainer.addSubview(recipesTableView)
         recipesTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -120,6 +167,7 @@ class RecipesViewController: UIViewController {
         recipesTableView.dataSource = self
         recipesTableView.register(TableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         recipesTableView.reloadData()
+        }
         
     }
 }
@@ -179,22 +227,42 @@ extension RecipesViewController: UITableViewDataSource {
         }.contains(recipe.id)
         
         if fav == false {
-            cell.heartButton.setBackgroundImage(UIImage(named: "favorite"), for: .normal)
+            cell.heartButton.setBackgroundImage(favoriteImage, for: .normal)
         }
         else {
-            cell.heartButton.setBackgroundImage(UIImage(named: "favorite-painted-over"), for: .normal)
+            cell.heartButton.setBackgroundImage(favoritePaintedOverImage, for: .normal)
         }
         
         cell.heartButton.addAction(for: .touchUpInside) { (heartButton) in
-            print(FavouriteRecipes.shared.recipes.count)
-            if fav == true {
-                FirebaseManager.shared.remove(id: String(recipe.id))
-                cell.heartButton.setBackgroundImage(UIImage(named: "favorite"), for: .normal)
+            print("yeah!")
+            if Auth.auth().currentUser != nil {
+                
+                print(FavouriteRecipes.shared.recipes.count)
+                if fav == true {
+                    FirebaseManager.shared.remove(id: String(recipe.id))
+                    FavouriteRecipes.shared.recipes = FavouriteRecipes.shared.recipes.filter({
+                        $0["id"] as! Int != recipe.id
+                    })
+                    tableView.reloadData()
+                    cell.heartButton.setBackgroundImage(self.favoriteImage, for: .normal)
+                }
+                else {
+                    FirebaseManager.shared.saveRecipe(recipe: recipe)
+                    FavouriteRecipes.shared.recipes.append(["id": recipe.id, "title": recipe.title, "image": recipe.image])
+                    tableView.reloadData()
+                    cell.heartButton.setBackgroundImage(self.favoritePaintedOverImage, for: .normal)
+                }
             }
             else {
-                FirebaseManager.shared.saveRecipe(recipe: recipe)
-                cell.heartButton.setBackgroundImage(UIImage(named: "favorite-painted-over"), for: .normal)
+                let alert = UIAlertController(title: "You're not registered", message: "You need an account to save recipes. Would you like to sign up now?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "NO", style: .default))
+                alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (alert) in
+                    self.navigationController?.pushViewController(SignUpViewController(), animated: true)
+                }))
+                self.present(alert, animated: true, completion: nil)
             }
+            
+            
         }
         
         return cell
@@ -221,7 +289,6 @@ class TableViewCell: UITableViewCell {
     var heartButton: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setBackgroundImage(UIImage(named: "favorite"), for: .normal)
         return btn
     }()
     
@@ -276,12 +343,13 @@ class TableViewCell: UITableViewCell {
         
         mainCellView.addConstraints([
             recipeName.leadingAnchor.constraint(equalTo: recipeImage.trailingAnchor, constant: 20),
-            recipeName.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -20)
+            recipeName.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -30),
+            recipeName.topAnchor.constraint(equalTo: mainCellView.topAnchor, constant: 5)
         ])
         
         mainCellView.addConstraints([
-            heartButton.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor),
-            heartButton.topAnchor.constraint(equalTo: mainCellView.topAnchor),
+            heartButton.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -5),
+            heartButton.topAnchor.constraint(equalTo: mainCellView.topAnchor, constant: 5),
             heartButton.heightAnchor.constraint(equalToConstant: 20),
             heartButton.widthAnchor.constraint(equalToConstant: 20)
         ])

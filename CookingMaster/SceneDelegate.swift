@@ -43,6 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [ingredientsTab, recipesTab, favoritesTab]
+        tabBarController.tabBar.tintColor = UIColor.Theme.mainColor
         tabBarController.selectedIndex = 0
         tabBarController.tabBar.backgroundColor = .white
         

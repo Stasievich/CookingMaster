@@ -58,6 +58,11 @@ class IngredientsViewController: UIViewController {
                     self.recipes = getRecipes
                     SharedRecipes.sharedInstance.recipes = getRecipes
                     self.tabBarController?.selectedIndex = 1
+//                    let recipesTab = RecipesViewController()
+//                    recipesTab.tabBarItem.title = "Recipes"
+//                    recipesTab.tabBarItem.image = UIImage(named: "recipe-book")
+//                    self.tabBarController?.viewControllers?[1] = recipesTab
+//                    self.tabBarController?.selectedIndex = 1
                 }
             }
             catch {
@@ -73,7 +78,7 @@ class IngredientsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        view.backgroundColor = UIColor.Theme.mainColor
         
         headerText.text = "Ingredients"
         headerText.font = UIFont(name: "Helvetica", size: 30)
@@ -111,7 +116,7 @@ class IngredientsViewController: UIViewController {
         
         let searchRecipesByChosenIngredientsContainer = UIView()
         view.addSubview(searchRecipesByChosenIngredientsContainer)
-        searchRecipesByChosenIngredientsContainer.backgroundColor = .none
+        searchRecipesByChosenIngredientsContainer.backgroundColor = .white
         
         searchRecipesByChosenIngredientsContainer.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints([
@@ -123,7 +128,8 @@ class IngredientsViewController: UIViewController {
         
         searchRecipesByChosenIngredientsContainer.addSubview(searchByChosenIngredientsButton)
         searchByChosenIngredientsButton.translatesAutoresizingMaskIntoConstraints = false
-        searchByChosenIngredientsButton.setTitle("SearchByChosenIngredients", for: .normal)
+        searchByChosenIngredientsButton.setTitle("See recipes", for: .normal)
+        searchByChosenIngredientsButton.setButtonToMainTheme()
         searchRecipesByChosenIngredientsContainer.addConstraints([
             searchByChosenIngredientsButton.topAnchor.constraint(equalTo: searchRecipesByChosenIngredientsContainer.topAnchor, constant: 10),
             searchByChosenIngredientsButton.heightAnchor.constraint(equalToConstant: 30),
@@ -160,6 +166,7 @@ class IngredientsViewController: UIViewController {
         searchRecipesByVoiceContainer.addSubview(voiceButton)
         voiceButton.translatesAutoresizingMaskIntoConstraints = false
         voiceButton.setTitle("Start recording", for: .normal)
+        voiceButton.setButtonToMainTheme()
         searchRecipesByVoiceContainer.addConstraints([
             voiceButton.leadingAnchor.constraint(equalTo: searchRecipesByVoiceContainer.leadingAnchor, constant: 10),
             voiceButton.widthAnchor.constraint(equalToConstant: view.frame.width / 2 - 20),
@@ -170,7 +177,8 @@ class IngredientsViewController: UIViewController {
         
         searchRecipesByVoiceContainer.addSubview(searchByVoiceButton)
         searchByVoiceButton.translatesAutoresizingMaskIntoConstraints = false
-        searchByVoiceButton.setTitle("SearchByVoice", for: .normal)
+        searchByVoiceButton.setTitle("Search by voice", for: .normal)
+        searchByVoiceButton.setButtonToMainTheme()
         searchRecipesByVoiceContainer.addConstraints([
             searchByVoiceButton.trailingAnchor.constraint(equalTo: searchRecipesByVoiceContainer.trailingAnchor, constant: -10),
             searchByVoiceButton.widthAnchor.constraint(equalToConstant: view.frame.width / 2 - 20),
@@ -194,7 +202,7 @@ class IngredientsViewController: UIViewController {
         ingredientsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         ingredientsCollectionView.fillView(ingredientsContainer)
         
-        ingredientsCollectionView.backgroundColor = .red
+        ingredientsCollectionView.backgroundColor = .white
 //        ingredientsCollectionView.dataSource = self
 //        ingredientsCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseID)
         ingredientsCollectionView.allowsMultipleSelection = true
@@ -246,7 +254,7 @@ class IngredientsViewController: UIViewController {
             let itemListArray = headerItem.itemsInCategory.map { ListItem.item($0) }
             sectionSnapshot.append(itemListArray, to: headerListItem)
             
-            sectionSnapshot.expand([headerListItem])
+//            sectionSnapshot.expand([headerListItem])
             
             dataSource.apply(sectionSnapshot, to: headerItem, animatingDifferences: false)
         }
@@ -300,6 +308,12 @@ class IngredientsViewController: UIViewController {
             self.ingredients.removeAll()
             let selectedItemsIndexes = ingredientsCollectionView.indexPathsForSelectedItems
             guard let selectedIndexes = selectedItemsIndexes else { return }
+            guard selectedIndexes.count != 0 else {
+                let alert = UIAlertController(title: "CookingMaster", message: "Please select one or more ingredients.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
             print(selectedIndexes)
             for index in selectedIndexes {
                 self.ingredients.append(IngredientsData.data.ingredients[index[0]].itemsInCategory[index[1] - 1].item)
@@ -321,7 +335,7 @@ extension IngredientsViewController: UICollectionViewDelegateFlowLayout {
         else {
             let item = IngredientsData.data.ingredients[indexPath.section].itemsInCategory[indexPath.row - 1].item
             let itemSize = item.size(withAttributes: [
-                NSAttributedString.Key.font : UIFont(name: "Helvetica", size: 12)!
+                NSAttributedString.Key.font : UIFont(name: "GillSans", size: 16)!
             ])
             let ingredientSize = CGSize(width: itemSize.width + 17, height: 35)
             return ingredientSize
@@ -339,15 +353,17 @@ class IngredientsViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.backgroundColor = UIColor.init(.white).cgColor
+        layer.backgroundColor = CGColor(gray: 0.9, alpha: 1)
         let selectedBackground = UIView()
-        selectedBackground.backgroundColor = .green
+        selectedBackground.backgroundColor = UIColor.Theme.buttonColor
+        label.textColor = .systemGray
+        label.highlightedTextColor = .white
         selectedBackground.layer.cornerRadius = 5
         selectedBackgroundView = selectedBackground
         
         contentView.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Helvetica", size: 12)
+        label.font = UIFont(name: "GillSans", size: 16)
         label.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
         label.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 8).isActive = true
         label.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant:  -8).isActive = true
@@ -360,7 +376,7 @@ class IngredientsViewCell: UICollectionViewCell {
 
 class HeaderViewCell: UICollectionViewListCell {
     let label = UILabel()
-    let headerDisclosureOption = UICellAccessory.OutlineDisclosureOptions(style: .header, tintColor: .blue)
+    let headerDisclosureOption = UICellAccessory.OutlineDisclosureOptions(style: .header, tintColor: UIColor.Theme.mainColor)
     
     required init?(coder: NSCoder) {
         fatalError("nope!")
@@ -369,13 +385,14 @@ class HeaderViewCell: UICollectionViewListCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 //        layer.backgroundColor = CGColor(red: 1, green: 0, blue: 1, alpha: 1)
-        contentView.layer.backgroundColor = UIColor(.blue).cgColor
+        contentView.layer.backgroundColor = UIColor.Theme.mainColor.cgColor
         
         accessories = [.outlineDisclosure(options: headerDisclosureOption)]
         
         contentView.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 12)
+        label.textColor = .white
         label.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
         label.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
         label.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant:  -8).isActive = true

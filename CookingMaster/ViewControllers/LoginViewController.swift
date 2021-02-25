@@ -116,9 +116,11 @@ class LoginViewController: UIViewController {
         matchLabel.font = UIFont(name: "Helvetica", size: 10)
         view.addSubview(matchLabel)
         matchLabel.translatesAutoresizingMaskIntoConstraints = false
+        matchLabel.numberOfLines = 0
         view.addConstraints([
             matchLabel.topAnchor.constraint(equalTo: loginContainer.bottomAnchor, constant: 5),
-            matchLabel.leftAnchor.constraint(equalTo: loginContainer.leftAnchor)
+            matchLabel.leftAnchor.constraint(equalTo: loginContainer.leftAnchor),
+            matchLabel.widthAnchor.constraint(equalTo: loginContainer.widthAnchor)
         ])
         
     }

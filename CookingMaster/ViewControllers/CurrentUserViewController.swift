@@ -53,7 +53,7 @@ class CurrentUserViewController: UIViewController {
             signOutButton.widthAnchor.constraint(equalTo: emailTextField.widthAnchor),
             signOutButton.heightAnchor.constraint(equalTo: emailTextField.heightAnchor)
         ])
-        signOutButton.backgroundColor = .green
+        signOutButton.backgroundColor = UIColor.Theme.buttonColor
         signOutButton.setTitleColor(.white, for: .normal)
         
         signOutButton.addAction(for: .touchUpInside) { (signOutButton) in
@@ -61,16 +61,28 @@ class CurrentUserViewController: UIViewController {
             do {
                 try Auth.auth().signOut()
                 FavouriteRecipes.shared.recipes.removeAll()
+                SharedRecipes.sharedInstance.recipes.removeAll()
+                let ingredientsTab = IngredientsViewController()
+                ingredientsTab.tabBarItem.title = "Ingredients"
+                ingredientsTab.tabBarItem.image = UIImage(named: "fridge")
+                
+                let recipesTab = RecipesViewController()
+                recipesTab.tabBarItem.title = "Recipes"
+                recipesTab.tabBarItem.image = UIImage(named: "recipe-book")
+                
                 let favoritesTab = FavoritesViewController()
-                favoritesTab.navigationController?.isNavigationBarHidden = true
-                favoritesTab.tabBarItem.title = "Favorites111"
+                favoritesTab.tabBarItem.title = "Favorites"
                 favoritesTab.tabBarItem.image = UIImage(named: "favorite")
 //                let tab = UIApplication.shared.windows.first?.rootViewController?.children.first
 //                tab?.addChild(favoritesTab)
 //                self.navigationController?.viewControllers.first?.children
-                self.navigationController?.viewControllers.first?.children[2].removeFromParent()
-                self.navigationController?.viewControllers.first?.addChild(favoritesTab)
-                
+                let tabBarVC = self.navigationController?.viewControllers.first as! UITabBarController
+                tabBarVC.viewControllers = [ingredientsTab, recipesTab, favoritesTab]
+//                tabBarVC.viewControllers?.remove(at: 2)
+//                tabBarVC.viewControllers?.append(favoritesTab)
+//                self.navigationController?.viewControllers.first?.children[2].removeFromParent()
+//                self.navigationController?.viewControllers.first?.addChild(favoritesTab)
+//                
 //                self.navigationController?.topViewController?.tabBarController?.viewControllers?.remove(at: 2)
                 self.navigationController?.popToRootViewController(animated: true)
             } catch let signOutError as NSError {
@@ -95,21 +107,8 @@ class CurrentUserViewController: UIViewController {
             
             if let userEmail = Auth.auth().currentUser?.email {
                 Auth.auth().sendPasswordReset(withEmail: userEmail) { error in
-                    let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-                                                    switch action.style{
-                                                    case .default:
-                                                        print("default")
-                                                        
-                                                    case .cancel:
-                                                        print("cancel")
-                                                        
-                                                    case .destructive:
-                                                        print("destructive")
-                                                        
-                                                    @unknown default:
-                                                        print("unknown default")
-                                                    }}))
+                    let alert = UIAlertController(title: "CookingMaster", message: "Please check your inbox for a password reset email.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
                     self.present(alert, animated: true, completion: nil)
                 }
                 

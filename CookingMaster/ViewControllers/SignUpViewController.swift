@@ -163,7 +163,8 @@ class SignUpViewController: UIViewController {
         matchLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints([
             matchLabel.topAnchor.constraint(equalTo: signUpContainer.bottomAnchor, constant: 5),
-            matchLabel.leftAnchor.constraint(equalTo: signUpContainer.leftAnchor)
+            matchLabel.leftAnchor.constraint(equalTo: signUpContainer.leftAnchor),
+            matchLabel.widthAnchor.constraint(equalTo: signUpContainer.widthAnchor)
         ])
         
     }
