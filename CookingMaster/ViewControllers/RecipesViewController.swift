@@ -109,8 +109,8 @@ class RecipesViewController: UIViewController {
             recipesContainer.addConstraints([
                 recipeBookImage.topAnchor.constraint(equalTo: recipesContainer.topAnchor, constant: 60),
                 recipeBookImage.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
-                recipeBookImage.widthAnchor.constraint(equalToConstant: 50),
-                recipeBookImage.heightAnchor.constraint(equalToConstant: 50)
+                recipeBookImage.widthAnchor.constraint(equalToConstant: view.frame.width / 4),
+                recipeBookImage.heightAnchor.constraint(equalToConstant: view.frame.width / 4)
             ])
             
             
@@ -253,7 +253,6 @@ extension RecipesViewController: UITableViewDataSource {
         }
         
         cell.heartButton.addAction(for: .touchUpInside) { (heartButton) in
-            print("yeah!")
             if Auth.auth().currentUser != nil {
                 
                 print(FavouriteRecipes.shared.recipes.count)
@@ -329,7 +328,7 @@ class TableViewCell: UITableViewCell {
     
     var usedIngredientsCountLabel: UILabel = {
        let lbl = UILabel()
-        lbl.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 11)
+        lbl.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 13)
         lbl.textColor = .gray
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl

@@ -29,7 +29,7 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(cgColor: CGColor(gray: 0.7, alpha: 1))
         
         self.addBackButton()
 
@@ -140,6 +140,8 @@ class SignUpViewController: UIViewController {
                 Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
                     FavouriteRecipes.shared.recipes.removeAll()
                 }
+                let rootVC = self.navigationController?.viewControllers.first as! UITabBarController
+                rootVC.selectedIndex = 0
                 self.navigationController?.popToRootViewController(animated: true)
             }
         }
@@ -161,7 +163,7 @@ class SignUpViewController: UIViewController {
         
         
         matchLabel.text = ""
-        matchLabel.font = UIFont(name: "Helvetica", size: 10)
+        matchLabel.font = UIFont(name: "Helvetica", size: 11)
         view.addSubview(matchLabel)
         matchLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints([

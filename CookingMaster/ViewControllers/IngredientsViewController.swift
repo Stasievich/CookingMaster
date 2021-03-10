@@ -59,11 +59,6 @@ class IngredientsViewController: UIViewController {
                     self.recipes = getRecipes
                     SharedRecipes.sharedInstance.recipes = getRecipes
                     self.tabBarController?.selectedIndex = 1
-//                    let recipesTab = RecipesViewController()
-//                    recipesTab.tabBarItem.title = "Recipes"
-//                    recipesTab.tabBarItem.image = UIImage(named: "recipe-book")
-//                    self.tabBarController?.viewControllers?[1] = recipesTab
-//                    self.tabBarController?.selectedIndex = 1
                 }
             }
             catch {
@@ -309,7 +304,6 @@ class IngredientsViewController: UIViewController {
                             arr.append(ingredient.annotation)
                         }
                         self.ingredients = arr
-                        print(self.ingredients)
                         self.getRecipes()
                     }
                 }
@@ -330,12 +324,10 @@ class IngredientsViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
                 return
             }
-            print(selectedIndexes)
             for index in selectedIndexes {
                 self.ingredients.append(IngredientsData.data.ingredients[index[0]].itemsInCategory[index[1] - 1].item)
             }
             
-            print(self.ingredients)
             self.getRecipes()
         }
         

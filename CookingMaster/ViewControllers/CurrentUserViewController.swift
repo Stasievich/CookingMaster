@@ -19,7 +19,7 @@ class CurrentUserViewController: UIViewController {
     
     override func viewDidLoad () {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(cgColor: CGColor(gray: 0.7, alpha: 1))
         self.addBackButton()
         
         if let userEmail = Auth.auth().currentUser?.email {
@@ -87,17 +87,11 @@ class CurrentUserViewController: UIViewController {
                 let favoritesTab = FavoritesViewController()
                 favoritesTab.tabBarItem.title = "Favorites"
                 favoritesTab.tabBarItem.image = UIImage(named: "favorite")
-//                let tab = UIApplication.shared.windows.first?.rootViewController?.children.first
-//                tab?.addChild(favoritesTab)
-//                self.navigationController?.viewControllers.first?.children
+                
                 let tabBarVC = self.navigationController?.viewControllers.first as! UITabBarController
                 tabBarVC.viewControllers = [ingredientsTab, recipesTab, favoritesTab]
-//                tabBarVC.viewControllers?.remove(at: 2)
-//                tabBarVC.viewControllers?.append(favoritesTab)
-//                self.navigationController?.viewControllers.first?.children[2].removeFromParent()
-//                self.navigationController?.viewControllers.first?.addChild(favoritesTab)
-//                
-//                self.navigationController?.topViewController?.tabBarController?.viewControllers?.remove(at: 2)
+                tabBarVC.selectedIndex = 0
+                
                 self.navigationController?.popToRootViewController(animated: true)
             } catch let signOutError as NSError {
                 print ("Error signing out: %@", signOutError)

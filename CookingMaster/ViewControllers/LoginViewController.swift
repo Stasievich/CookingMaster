@@ -20,7 +20,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(cgColor: CGColor(gray: 0.7, alpha: 1))
         self.addBackButton()
         
         loginContainer.backgroundColor = .white
@@ -94,6 +94,8 @@ class LoginViewController: UIViewController {
             Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
                 guard error == nil else { self.matchLabel.text = error!.localizedDescription; return }
                 FavouriteRecipes.shared.recipes.removeAll()
+                let rootVC = self.navigationController?.viewControllers.first as! UITabBarController
+                rootVC.selectedIndex = 0
                 self.navigationController?.popToRootViewController(animated: true)
             }
         }
@@ -115,7 +117,7 @@ class LoginViewController: UIViewController {
         
         
         matchLabel.text = ""
-        matchLabel.font = UIFont(name: "Helvetica", size: 10)
+        matchLabel.font = UIFont(name: "Helvetica", size: 11)
         view.addSubview(matchLabel)
         matchLabel.translatesAutoresizingMaskIntoConstraints = false
         matchLabel.numberOfLines = 0

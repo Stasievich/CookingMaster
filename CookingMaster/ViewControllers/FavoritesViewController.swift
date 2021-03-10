@@ -82,8 +82,8 @@ class FavoritesViewController: UIViewController {
             recipesContainer.addConstraints([
                 recipeBookImage.topAnchor.constraint(equalTo: recipesContainer.topAnchor, constant: 60),
                 recipeBookImage.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
-                recipeBookImage.widthAnchor.constraint(equalToConstant: 50),
-                recipeBookImage.heightAnchor.constraint(equalToConstant: 50)
+                recipeBookImage.widthAnchor.constraint(equalToConstant: view.frame.width / 4),
+                recipeBookImage.heightAnchor.constraint(equalToConstant: view.frame.width / 4)
             ])
             
             promptForSignUpLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -244,7 +244,7 @@ class FavoritesTableViewCell: UITableViewCell {
     var deleteButton: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setBackgroundImage(UIImage(named: "trash"), for: .normal)
+        btn.setBackgroundImage(UIImage(named: "trash")?.withTintColor(UIColor.Theme.mainColor), for: .normal)
         return btn
     }()
     
