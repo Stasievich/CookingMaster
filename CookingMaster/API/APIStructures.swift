@@ -24,3 +24,12 @@ struct FoodAnnotation: Codable {
     var annotation: String
     var tag: String
 }
+
+struct RecipeDescription: Codable {
+    var id: Int
+    var title: String
+    var readyInMinutes: Int
+    var image: String
+    var instructions: String?
+    var sourceUrl: String
+}

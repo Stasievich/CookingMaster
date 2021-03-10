@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		575FFBC425D42923007E681D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 575FFBC325D42923007E681D /* GoogleService-Info.plist */; };
+		575FFC0425D8464A007E681D /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC0325D8464A007E681D /* SignUpViewController.swift */; };
+		575FFC1925D884E1007E681D /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC1825D884E1007E681D /* UITextFieldExtension.swift */; };
+		575FFC3025D97242007E681D /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC2F25D97242007E681D /* FirebaseManager.swift */; };
+		575FFC4525DABB1A007E681D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC4425DABB1A007E681D /* LoginViewController.swift */; };
+		57A129A325E477F7009173A5 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A129A225E477F7009173A5 /* UIViewExtension.swift */; };
+		57A129A625E556D1009173A5 /* CurrentUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A129A525E556D1009173A5 /* CurrentUserViewController.swift */; };
 		57C291F025B97929003E1164 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C291EF25B97929003E1164 /* AppDelegate.swift */; };
 		57C291F225B97929003E1164 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C291F125B97929003E1164 /* SceneDelegate.swift */; };
 		57C291F725B97929003E1164 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C291F525B97929003E1164 /* Main.storyboard */; };
@@ -20,10 +27,22 @@
 		57C2921E25BD981A003E1164 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C2921D25BD981A003E1164 /* FavoritesViewController.swift */; };
 		57C2922225BD9EDD003E1164 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 57C2922125BD9EDD003E1164 /* Kingfisher */; };
 		57C2924225C6C502003E1164 /* VoiceRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C2924125C6C502003E1164 /* VoiceRecognition.swift */; };
+		57C82A8C25E059FE00988CB9 /* IngredientsDB.csv in Resources */ = {isa = PBXBuildFile; fileRef = 57C82A8B25E059FD00988CB9 /* IngredientsDB.csv */; };
+		57C82A8F25E08BB100988CB9 /* DBParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C82A8E25E08BB100988CB9 /* DBParser.swift */; };
+		57C82A9A25E28A4D00988CB9 /* RecipeDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C82A9925E28A4D00988CB9 /* RecipeDescriptionViewController.swift */; };
 		57E617E225C7110F00E31EB2 /* IngredientsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E617E125C7110F00E31EB2 /* IngredientsData.swift */; };
+		8DFA6FAB9ACD17352FCBF12C /* Pods_CookingMaster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F73B51222C05C6C3A87A5C89 /* Pods_CookingMaster.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F63AE05EB9B8DA79C249885 /* Pods-CookingMaster.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CookingMaster.release.xcconfig"; path = "Target Support Files/Pods-CookingMaster/Pods-CookingMaster.release.xcconfig"; sourceTree = "<group>"; };
+		575FFBC325D42923007E681D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		575FFC0325D8464A007E681D /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		575FFC1825D884E1007E681D /* UITextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
+		575FFC2F25D97242007E681D /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		575FFC4425DABB1A007E681D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		57A129A225E477F7009173A5 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		57A129A525E556D1009173A5 /* CurrentUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserViewController.swift; sourceTree = "<group>"; };
 		57C291EC25B97929003E1164 /* CookingMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookingMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C291EF25B97929003E1164 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57C291F125B97929003E1164 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -38,7 +57,12 @@
 		57C2921725BD7E52003E1164 /* RecipesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesViewController.swift; sourceTree = "<group>"; };
 		57C2921D25BD981A003E1164 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		57C2924125C6C502003E1164 /* VoiceRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecognition.swift; sourceTree = "<group>"; };
+		57C82A8B25E059FD00988CB9 /* IngredientsDB.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IngredientsDB.csv; sourceTree = "<group>"; };
+		57C82A8E25E08BB100988CB9 /* DBParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBParser.swift; sourceTree = "<group>"; };
+		57C82A9925E28A4D00988CB9 /* RecipeDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDescriptionViewController.swift; sourceTree = "<group>"; };
 		57E617E125C7110F00E31EB2 /* IngredientsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsData.swift; sourceTree = "<group>"; };
+		AE73C2C812BA04A1E21CA467 /* Pods-CookingMaster.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CookingMaster.debug.xcconfig"; path = "Target Support Files/Pods-CookingMaster/Pods-CookingMaster.debug.xcconfig"; sourceTree = "<group>"; };
+		F73B51222C05C6C3A87A5C89 /* Pods_CookingMaster.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CookingMaster.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,17 +71,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				57C2922225BD9EDD003E1164 /* Kingfisher in Frameworks */,
+				8DFA6FAB9ACD17352FCBF12C /* Pods_CookingMaster.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		575FFC1B25D88B7B007E681D /* UIExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				575FFC1825D884E1007E681D /* UITextFieldExtension.swift */,
+				57C2920B25B98E84003E1164 /* UIControlExtension.swift */,
+				57A129A225E477F7009173A5 /* UIViewExtension.swift */,
+			);
+			path = UIExtensions;
+			sourceTree = "<group>";
+		};
 		57C291E325B97929003E1164 = {
 			isa = PBXGroup;
 			children = (
 				57C291EE25B97929003E1164 /* CookingMaster */,
 				57C291ED25B97929003E1164 /* Products */,
+				86D267DD40A4AE989B8D20F0 /* Pods */,
+				5C35CD4C98AF0C714E7422F5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,17 +109,19 @@
 		57C291EE25B97929003E1164 /* CookingMaster */ = {
 			isa = PBXGroup;
 			children = (
-				57E617E025C710C600E31EB2 /* Data */,
-				57C2924025C6C4BD003E1164 /* VoiceRecognition */,
-				57C2921A25BD7E62003E1164 /* API */,
-				57C2921325BD7DAD003E1164 /* ViewControllers */,
+				575FFBC325D42923007E681D /* GoogleService-Info.plist */,
 				57C291FD25B9792B003E1164 /* Info.plist */,
 				57C291EF25B97929003E1164 /* AppDelegate.swift */,
 				57C291F125B97929003E1164 /* SceneDelegate.swift */,
-				57C2920B25B98E84003E1164 /* UIControlExtension.swift */,
 				57C291F825B9792B003E1164 /* Assets.xcassets */,
+				57C2921A25BD7E62003E1164 /* API */,
+				57E617E025C710C600E31EB2 /* Data */,
 				57C291FA25B9792B003E1164 /* LaunchScreen.storyboard */,
 				57C291F525B97929003E1164 /* Main.storyboard */,
+				575FFC1B25D88B7B007E681D /* UIExtensions */,
+				57C2921325BD7DAD003E1164 /* ViewControllers */,
+				57C2924025C6C4BD003E1164 /* VoiceRecognition */,
+				575FFC2F25D97242007E681D /* FirebaseManager.swift */,
 			);
 			path = CookingMaster;
 			sourceTree = "<group>";
@@ -93,6 +132,10 @@
 				57C2921425BD7DEC003E1164 /* IngredientsViewController.swift */,
 				57C2921725BD7E52003E1164 /* RecipesViewController.swift */,
 				57C2921D25BD981A003E1164 /* FavoritesViewController.swift */,
+				575FFC0325D8464A007E681D /* SignUpViewController.swift */,
+				575FFC4425DABB1A007E681D /* LoginViewController.swift */,
+				57C82A9925E28A4D00988CB9 /* RecipeDescriptionViewController.swift */,
+				57A129A525E556D1009173A5 /* CurrentUserViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -118,8 +161,27 @@
 			isa = PBXGroup;
 			children = (
 				57E617E125C7110F00E31EB2 /* IngredientsData.swift */,
+				57C82A8B25E059FD00988CB9 /* IngredientsDB.csv */,
+				57C82A8E25E08BB100988CB9 /* DBParser.swift */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		5C35CD4C98AF0C714E7422F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F73B51222C05C6C3A87A5C89 /* Pods_CookingMaster.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		86D267DD40A4AE989B8D20F0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AE73C2C812BA04A1E21CA467 /* Pods-CookingMaster.debug.xcconfig */,
+				4F63AE05EB9B8DA79C249885 /* Pods-CookingMaster.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,9 +191,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 57C2920025B9792B003E1164 /* Build configuration list for PBXNativeTarget "CookingMaster" */;
 			buildPhases = (
+				6BFA82A4BC38A790AE056A3B /* [CP] Check Pods Manifest.lock */,
 				57C291E825B97929003E1164 /* Sources */,
 				57C291E925B97929003E1164 /* Frameworks */,
 				57C291EA25B97929003E1164 /* Resources */,
+				EFCBC18DE991BA068F382132 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -187,6 +251,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				57C291FC25B9792B003E1164 /* LaunchScreen.storyboard in Resources */,
+				57C82A8C25E059FE00988CB9 /* IngredientsDB.csv in Resources */,
+				575FFBC425D42923007E681D /* GoogleService-Info.plist in Resources */,
 				57C291F925B9792B003E1164 /* Assets.xcassets in Resources */,
 				57C291F725B97929003E1164 /* Main.storyboard in Resources */,
 			);
@@ -194,21 +260,71 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6BFA82A4BC38A790AE056A3B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CookingMaster-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EFCBC18DE991BA068F382132 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CookingMaster/Pods-CookingMaster-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CookingMaster/Pods-CookingMaster-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CookingMaster/Pods-CookingMaster-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		57C291E825B97929003E1164 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				575FFC4525DABB1A007E681D /* LoginViewController.swift in Sources */,
+				575FFC3025D97242007E681D /* FirebaseManager.swift in Sources */,
+				575FFC0425D8464A007E681D /* SignUpViewController.swift in Sources */,
+				575FFC1925D884E1007E681D /* UITextFieldExtension.swift in Sources */,
 				57E617E225C7110F00E31EB2 /* IngredientsData.swift in Sources */,
 				57C2921825BD7E52003E1164 /* RecipesViewController.swift in Sources */,
 				57C2921E25BD981A003E1164 /* FavoritesViewController.swift in Sources */,
 				57C2920C25B98E84003E1164 /* UIControlExtension.swift in Sources */,
+				57A129A325E477F7009173A5 /* UIViewExtension.swift in Sources */,
 				57C2920925B98157003E1164 /* APIStructures.swift in Sources */,
 				57C291F025B97929003E1164 /* AppDelegate.swift in Sources */,
 				57C2921525BD7DEC003E1164 /* IngredientsViewController.swift in Sources */,
+				57C82A9A25E28A4D00988CB9 /* RecipeDescriptionViewController.swift in Sources */,
+				57C82A8F25E08BB100988CB9 /* DBParser.swift in Sources */,
 				57C2920625B97BB1003E1164 /* FoodAPI.swift in Sources */,
 				57C2924225C6C502003E1164 /* VoiceRecognition.swift in Sources */,
 				57C291F225B97929003E1164 /* SceneDelegate.swift in Sources */,
+				57A129A625E556D1009173A5 /* CurrentUserViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,6 +470,7 @@
 		};
 		57C2920125B9792B003E1164 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AE73C2C812BA04A1E21CA467 /* Pods-CookingMaster.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -372,6 +489,7 @@
 		};
 		57C2920225B9792B003E1164 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F63AE05EB9B8DA79C249885 /* Pods-CookingMaster.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

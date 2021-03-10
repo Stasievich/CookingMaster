@@ -8,33 +8,38 @@
 import UIKit
 import Speech
 import AVKit
+import Firebase
 
 
 class IngredientsViewController: UIViewController {
 
     var recipes = [RecipeByIngredients]()
     var searchByChosenIngredientsButton = UIButton(type: .system)
-    var ingredients = ["strawberry", "cheese"]
+    var ingredients = [String]()
     let headerText = UILabel()
     
     var dataSource: UICollectionViewDiffableDataSource<Ingredients, ListItem>!
-    var ingredientsLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 100, height: 100)
-        layout.scrollDirection = .vertical
-        return layout
-    }()
-    var listLayout: UICollectionViewCompositionalLayout = {
-        var layoutConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-        layoutConfig.headerMode = .firstItemInSection
-        let layout = UICollectionViewCompositionalLayout.list(using: layoutConfig)
-        return layout
-    }()
-    let reuseID = "cell"
+//    var ingredientsLayout: UICollectionViewFlowLayout = {
+//        let layout = UICollectionViewFlowLayout()
+//        layout.scrollDirection = .vertical
+//
+//        return layout
+//    }()
+//    var listLayout: UICollectionViewCompositionalLayout = {
+//        var layoutConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+//        layoutConfig.headerMode = .firstItemInSection
+//        let layout = UICollectionViewCompositionalLayout.list(using: layoutConfig)
+//        return layout
+//    }()
+//    var mosaicLayout: UICollectionViewCompositionalLayout = {
+//        var layoutConfig = UICollectionLayoutListConfiguration(appearance: .plain)
+//    }
+//    let reuseID = "cell"
     
     var voiceButton = UIButton(type: .system)
     var recognizedTextLabel = UILabel()
     var searchByVoiceButton = UIButton(type: .system)
+    let userButton = UIButton()
     
     let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     var recognitionRequest : SFSpeechAudioBufferRecognitionRequest?
@@ -42,7 +47,7 @@ class IngredientsViewController: UIViewController {
     let audioEngine = AVAudioEngine()
     
     
-    func getRecipes() {
+    fileprivate func getRecipes() {
         FoodAPI.shared.getRecipesByIngredient(ingredients: self.ingredients) { (data, error) in
             guard let data = data else  { return }
             
@@ -51,7 +56,6 @@ class IngredientsViewController: UIViewController {
                 
                 DispatchQueue.main.async {
                     self.recipes = getRecipes
-                    print(self.recipes)
                     SharedRecipes.sharedInstance.recipes = getRecipes
                     self.tabBarController?.selectedIndex = 1
                 }
@@ -62,10 +66,14 @@ class IngredientsViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .red
-        
         
         headerText.text = "Ingredients"
         headerText.font = UIFont(name: "Helvetica", size: 30)
@@ -73,18 +81,42 @@ class IngredientsViewController: UIViewController {
         headerText.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(headerText)
         view.addConstraints([
-            headerText.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+            headerText.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             headerText.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
+        
+        userButton.translatesAutoresizingMaskIntoConstraints = false
+        userButton.setBackgroundImage(UIImage(named: "key"), for: .normal)
+        view.addSubview(userButton)
+        view.addConstraints([
+            userButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            userButton.centerYAnchor.constraint(equalTo: headerText.centerYAnchor),
+            userButton.widthAnchor.constraint(equalToConstant: 30),
+            userButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
+        userButton.backgroundColor = .white
+        userButton.layer.cornerRadius = 15
+        
+        userButton.addAction(for: .touchUpInside) { (signOutButton) in
+            if Auth.auth().currentUser == nil {
+                let signUpVC = SignUpViewController()
+                self.navigationController?.pushViewController(signUpVC, animated: true)
+            }
+            else {
+                let currentUserViewController = CurrentUserViewController()
+                self.navigationController?.pushViewController(currentUserViewController, animated: true)
+            }
+        }
         
         
         let searchRecipesByChosenIngredientsContainer = UIView()
         view.addSubview(searchRecipesByChosenIngredientsContainer)
-        searchRecipesByChosenIngredientsContainer.backgroundColor = .white
+        searchRecipesByChosenIngredientsContainer.backgroundColor = .none
+        
         searchRecipesByChosenIngredientsContainer.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints([
             searchRecipesByChosenIngredientsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            searchRecipesByChosenIngredientsContainer.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+            searchRecipesByChosenIngredientsContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -(self.tabBarController?.tabBar.frame.size.height)!),
             searchRecipesByChosenIngredientsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchRecipesByChosenIngredientsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
@@ -107,11 +139,10 @@ class IngredientsViewController: UIViewController {
         searchRecipesByVoiceContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.addConstraints([
             searchRecipesByVoiceContainer.heightAnchor.constraint(equalToConstant: 100),
-            searchRecipesByVoiceContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
+            searchRecipesByVoiceContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
             searchRecipesByVoiceContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchRecipesByVoiceContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        
         
         
         searchRecipesByVoiceContainer.addSubview(recognizedTextLabel)
@@ -121,7 +152,7 @@ class IngredientsViewController: UIViewController {
         searchRecipesByVoiceContainer.addConstraints([
             recognizedTextLabel.topAnchor.constraint(equalTo: searchRecipesByVoiceContainer.topAnchor, constant: 20),
             recognizedTextLabel.heightAnchor.constraint(equalToConstant: 20),
-            recognizedTextLabel.widthAnchor.constraint(equalToConstant: view.frame.width - 20),
+            recognizedTextLabel.widthAnchor.constraint(equalToConstant: view.frame.width - 30),
             recognizedTextLabel.centerXAnchor.constraint(equalTo: searchRecipesByVoiceContainer.centerXAnchor)
         ])
         
@@ -158,38 +189,29 @@ class IngredientsViewController: UIViewController {
             ingredientsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-        let ingredientsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: listLayout)
+        let ingredientsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: CustomViewFlowLayout())
         ingredientsContainer.addSubview(ingredientsCollectionView)
         ingredientsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraints([
-            ingredientsCollectionView.topAnchor.constraint(equalTo: ingredientsContainer.topAnchor),
-            ingredientsCollectionView.bottomAnchor.constraint(equalTo: ingredientsContainer.bottomAnchor),
-            ingredientsCollectionView.leadingAnchor.constraint(equalTo: ingredientsContainer.leadingAnchor),
-            ingredientsCollectionView.trailingAnchor.constraint(equalTo: ingredientsContainer.trailingAnchor)
-        ])
+        ingredientsCollectionView.fillView(ingredientsContainer)
+        
         ingredientsCollectionView.backgroundColor = .red
 //        ingredientsCollectionView.dataSource = self
-        ingredientsCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseID)
+//        ingredientsCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseID)
         ingredientsCollectionView.allowsMultipleSelection = true
-//        ingredientsCollectionView.delegate = self
+        ingredientsCollectionView.delegate = self
         
-        let headerCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Ingredients> {
+        let headerCellRegistration = UICollectionView.CellRegistration<HeaderViewCell, Ingredients> {
             (cell, indexPath, headerItem) in
             
-            var content = cell.defaultContentConfiguration()
-            content.text = headerItem.category
-            cell.contentConfiguration = content
+            cell.label.text = headerItem.category
+            cell.backgroundView?.backgroundColor = .cyan
             
-            let headerDisclosureOption = UICellAccessory.OutlineDisclosureOptions(style: .header)
-            cell.accessories = [.outlineDisclosure(options: headerDisclosureOption)]
         }
         
-        let itemsCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, ItemInCategory> {
+        let itemsCellRegistration = UICollectionView.CellRegistration<IngredientsViewCell, ItemInCategory> {
             (cell, indexPath, items) in
             
-            var content = cell.defaultContentConfiguration()
-            content.text = items.item
-            cell.contentConfiguration = content
+            cell.label.text = items.item
             
         }
         
@@ -205,9 +227,6 @@ class IngredientsViewController: UIViewController {
                 let cell = collectionView.dequeueConfiguredReusableCell(using: itemsCellRegistration,
                                                                         for: indexPath,
                                                                         item: item)
-                let selectedBackground = UIView()
-                selectedBackground.backgroundColor = .green
-                cell.selectedBackgroundView = selectedBackground
                 return cell
             }
         }
@@ -231,8 +250,6 @@ class IngredientsViewController: UIViewController {
             
             dataSource.apply(sectionSnapshot, to: headerItem, animatingDifferences: false)
         }
-        
-        
         
         
         self.setupSpeech()
@@ -295,26 +312,99 @@ class IngredientsViewController: UIViewController {
     }
 }
 
-//extension IngredientsViewController: UICollectionViewDataSource {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 20
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseID, for: indexPath)
-//        cell.backgroundColor = .systemBlue
-//
-//        let selectedBackground = UIView()
-//        selectedBackground.backgroundColor = .green
-//        cell.selectedBackgroundView = selectedBackground
-//        return cell
-//    }
-//
-//}
+extension IngredientsViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if indexPath.row == 0 {
+            return CGSize(width: view.frame.width - 20, height: 50)
+        }
+        else {
+            let item = IngredientsData.data.ingredients[indexPath.section].itemsInCategory[indexPath.row - 1].item
+            let itemSize = item.size(withAttributes: [
+                NSAttributedString.Key.font : UIFont(name: "Helvetica", size: 12)!
+            ])
+            let ingredientSize = CGSize(width: itemSize.width + 17, height: 35)
+            return ingredientSize
+        }
+    }
+}
 
-//extension IngredientsViewController: UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        self.ingredients = IngredientsData.data.ingredients[indexPath.section].itemsInCategory[indexPath.row].item
-//
-//    }
-//}
+
+class IngredientsViewCell: UICollectionViewCell {
+    let label = UILabel()
+    
+    required init?(coder: NSCoder) {
+        fatalError("nope!")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layer.backgroundColor = UIColor.init(.white).cgColor
+        let selectedBackground = UIView()
+        selectedBackground.backgroundColor = .green
+        selectedBackground.layer.cornerRadius = 5
+        selectedBackgroundView = selectedBackground
+        
+        contentView.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "Helvetica", size: 12)
+        label.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+        label.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 8).isActive = true
+        label.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant:  -8).isActive = true
+        label.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -8).isActive = true
+        
+        layer.cornerRadius = 5
+        
+    }
+}
+
+class HeaderViewCell: UICollectionViewListCell {
+    let label = UILabel()
+    let headerDisclosureOption = UICellAccessory.OutlineDisclosureOptions(style: .header, tintColor: .blue)
+    
+    required init?(coder: NSCoder) {
+        fatalError("nope!")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+//        layer.backgroundColor = CGColor(red: 1, green: 0, blue: 1, alpha: 1)
+        contentView.layer.backgroundColor = UIColor(.blue).cgColor
+        
+        accessories = [.outlineDisclosure(options: headerDisclosureOption)]
+        
+        contentView.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 12)
+        label.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+        label.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
+        label.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant:  -8).isActive = true
+        label.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
+        
+        contentView.layer.cornerRadius = 5
+        
+    }
+    
+}
+
+class CustomViewFlowLayout: UICollectionViewFlowLayout {
+    let cellSpacing: CGFloat = 10
+ 
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        self.minimumLineSpacing = 10.0
+        self.sectionInset = UIEdgeInsets(top: 12.0, left: 10.0, bottom: 0.0, right: 10.0)
+        let attributes = super.layoutAttributesForElements(in: rect)
+ 
+        var leftMargin = sectionInset.left
+        var maxY: CGFloat = -1.0
+        attributes?.forEach { layoutAttribute in
+            if layoutAttribute.frame.origin.y >= maxY {
+                leftMargin = sectionInset.left
+            }
+            layoutAttribute.frame.origin.x = leftMargin
+            leftMargin += layoutAttribute.frame.width + cellSpacing
+            maxY = max(layoutAttribute.frame.maxY, maxY)
+        }
+        return attributes
+    }
+}

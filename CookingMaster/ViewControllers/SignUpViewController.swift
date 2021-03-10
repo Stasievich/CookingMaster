@@ -6,84 +6,205 @@
 //
 
 import UIKit
+import Firebase
 
-class SignUpViewController: UITableViewController {
+class SignUpViewController: UIViewController {
 
+    var nameTextField = TextField()
+    var emailTextField = TextField()
+    var passwordTextField = TextField()
+    var verifyPasswordTextField = TextField()
+    var matchLabel = UILabel()
+    
+    var signUpContainer = UIView()
+    var loginButton = UIButton(type: .system)
+    var cookButton = UIButton(type: .system)
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.navigationBar.barTintColor = .lightGray
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .lightGray
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        signUpContainer.backgroundColor = .white
+        signUpContainer.layer.cornerRadius = 8
+        view.addSubview(signUpContainer)
+        signUpContainer.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints([
+            signUpContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            signUpContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            signUpContainer.heightAnchor.constraint(equalToConstant: 200.0),
+            signUpContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        signUpContainer.layer.shadowColor = UIColor.gray.cgColor
+        signUpContainer.layer.shadowRadius = 10
+        signUpContainer.layer.shadowOpacity = 1
+        signUpContainer.layer.shadowOffset = .zero
+//        signUpContainer.layer.bounds = CGRect(x: 10, y: view.bounds.maxY / 2 - 100, width: view.bounds.width - 20, height: 200)
+        signUpContainer.layer.shadowPath = UIBezierPath(rect: signUpContainer.layer.bounds).cgPath
+        
+        
+        nameTextField.placeholder = "Name"
+        signUpContainer.addSubview(nameTextField)
+        nameTextField.translatesAutoresizingMaskIntoConstraints = false
+        signUpContainer.addConstraints([
+            nameTextField.trailingAnchor.constraint(equalTo: signUpContainer.trailingAnchor),
+            nameTextField.leadingAnchor.constraint(equalTo: signUpContainer.leadingAnchor),
+            nameTextField.topAnchor.constraint(equalTo: signUpContainer.topAnchor),
+            nameTextField.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        nameTextField.layer.borderColor = CGColor(gray: 0.5, alpha: 1)
+        nameTextField.layer.borderWidth = 0.5
+        nameTextField.layer.cornerRadius = 8
+        nameTextField.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        nameTextField.autocorrectionType = .no
+        
+        emailTextField.placeholder = "Email"
+        signUpContainer.addSubview(emailTextField)
+        emailTextField.translatesAutoresizingMaskIntoConstraints = false
+        signUpContainer.addConstraints([
+            emailTextField.trailingAnchor.constraint(equalTo: signUpContainer.trailingAnchor),
+            emailTextField.leadingAnchor.constraint(equalTo: signUpContainer.leadingAnchor),
+            emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor),
+            emailTextField.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        emailTextField.layer.borderColor = CGColor(gray: 0.5, alpha: 1)
+        emailTextField.layer.borderWidth = 0.5
+        emailTextField.autocorrectionType = .no
+        
+        passwordTextField.placeholder = "Password"
+        signUpContainer.addSubview(passwordTextField)
+        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
+        signUpContainer.addConstraints([
+            passwordTextField.trailingAnchor.constraint(equalTo: signUpContainer.trailingAnchor),
+            passwordTextField.leadingAnchor.constraint(equalTo: signUpContainer.leadingAnchor),
+            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        passwordTextField.layer.borderColor = CGColor(gray: 0.5, alpha: 1)
+        passwordTextField.layer.borderWidth = 0.5
+        passwordTextField.autocorrectionType = .no
+        passwordTextField.isSecureTextEntry = true
+        
+        verifyPasswordTextField.placeholder = "Verify password"
+        signUpContainer.addSubview(verifyPasswordTextField)
+        verifyPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
+        signUpContainer.addConstraints([
+            verifyPasswordTextField.trailingAnchor.constraint(equalTo: signUpContainer.trailingAnchor),
+            verifyPasswordTextField.leadingAnchor.constraint(equalTo: signUpContainer.leadingAnchor),
+            verifyPasswordTextField.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor),
+            verifyPasswordTextField.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        verifyPasswordTextField.layer.borderColor = CGColor(gray: 0.5, alpha: 1)
+        verifyPasswordTextField.layer.borderWidth = 0.5
+        verifyPasswordTextField.layer.cornerRadius = 8
+        verifyPasswordTextField.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        verifyPasswordTextField.autocorrectionType = .no
+        verifyPasswordTextField.isSecureTextEntry = true
+        
+        
+        cookButton.setTitle("Let's Cook!", for: .normal)
+        view.addSubview(cookButton)
+        cookButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints([
+            cookButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            cookButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            cookButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            cookButton.widthAnchor.constraint(equalToConstant: view.frame.width)
+        ])
+        cookButton.backgroundColor = .red
+        cookButton.setTitleColor(.white, for: .normal)
+        
+        cookButton.addAction(for: .touchUpInside) { (cookButton) in
+            guard let email = self.emailTextField.text,
+                  let password = self.verifyPasswordTextField.text else { return }
+            guard self.isEmailValid(email) == true else { self.matchLabel.text = "email is not valid"; return }
+            guard self.isPasswordValid(password) == true else { return }
+            
+            Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+                guard error == nil else { self.matchLabel.text = "\(error!.localizedDescription)"; return }
+                
+                let newUser = authResult?.user
+                if let id = newUser?.uid {
+                    FirebaseManager.shared.saveNewUser(id: id, name: self.nameTextField.text!)
+                }
+                print("\(String(describing: newUser?.email)) created!")
+                Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+                    FavouriteRecipes.shared.recipes.removeAll()
+                }
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+        }
+        
+        loginButton.setTitle("Login", for: .normal)
+        view.addSubview(loginButton)
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints([
+            loginButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            loginButton.widthAnchor.constraint(equalToConstant: 80),
+            loginButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        loginButton.addAction(for: .touchUpInside) { (loginButton) in
+            let loginVC = LoginViewController()
+            self.navigationController?.pushViewController(loginVC, animated: true)
+        }
+        
+        
+        matchLabel.text = ""
+        matchLabel.font = UIFont(name: "Helvetica", size: 10)
+        view.addSubview(matchLabel)
+        matchLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints([
+            matchLabel.topAnchor.constraint(equalTo: signUpContainer.bottomAnchor, constant: 5),
+            matchLabel.leftAnchor.constraint(equalTo: signUpContainer.leftAnchor)
+        ])
+        
     }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    
+    
+    func isEmailValid(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
+    
+    func isPasswordValid(_ password: String) -> Bool {
+        if passwordTextField.text != verifyPasswordTextField.text {
+            matchLabel.text = "Passwords don't match!"
+            return false
+        }
+        else if let count = verifyPasswordTextField.text?.count {
+            if count < 8 {
+                matchLabel.text = "Password must contain at least 8 characters!"
+                return false
+            }
+            else if passwordTextField.text == passwordTextField.text?.lowercased() {
+                matchLabel.text = "Password must contain at least 1 uppercase character!"
+                return false
+            }
+            else if passwordTextField.text == passwordTextField.text?.uppercased() {
+                matchLabel.text = "Password must contain at least 1 lowercase character!"
+                return false
+            }
+            else if passwordTextField.text?.rangeOfCharacter(from: CharacterSet.decimalDigits) == nil {
+                matchLabel.text = "Password must contain at least 1 digit character!"
+                return false
+            }
+            else {
+                matchLabel.text = ""
+                return true
+            }
+        }
         return true
     }
-    */
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+   
 
 }

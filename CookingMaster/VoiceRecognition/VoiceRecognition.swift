@@ -100,6 +100,7 @@ extension IngredientsViewController {
             
             OperationQueue.main.addOperation() {
                 self.voiceButton.isEnabled = isButtonEnabled
+                self.searchByVoiceButton.isEnabled = isButtonEnabled
             }
         }
     }
