@@ -20,7 +20,8 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(cgColor: CGColor(gray: 0.7, alpha: 1))
+        self.addBackButton()
         
         loginContainer.backgroundColor = .white
         loginContainer.layer.cornerRadius = 8
@@ -82,7 +83,7 @@ class LoginViewController: UIViewController {
             cookButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
             cookButton.widthAnchor.constraint(equalToConstant: view.frame.width)
         ])
-        cookButton.backgroundColor = .red
+        cookButton.backgroundColor = UIColor.Theme.buttonColor
         cookButton.setTitleColor(.white, for: .normal)
         
         cookButton.addAction(for: .touchUpInside) { (cookButton) in
@@ -93,6 +94,8 @@ class LoginViewController: UIViewController {
             Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
                 guard error == nil else { self.matchLabel.text = error!.localizedDescription; return }
                 FavouriteRecipes.shared.recipes.removeAll()
+                let rootVC = self.navigationController?.viewControllers.first as! UITabBarController
+                rootVC.selectedIndex = 0
                 self.navigationController?.popToRootViewController(animated: true)
             }
         }
@@ -100,6 +103,7 @@ class LoginViewController: UIViewController {
         signUpButton.setTitle("Sign Up", for: .normal)
         view.addSubview(signUpButton)
         signUpButton.translatesAutoresizingMaskIntoConstraints = false
+        signUpButton.setTitleColor(UIColor.Theme.mainColor, for: .normal)
         view.addConstraints([
             signUpButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             signUpButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
@@ -113,12 +117,14 @@ class LoginViewController: UIViewController {
         
         
         matchLabel.text = ""
-        matchLabel.font = UIFont(name: "Helvetica", size: 10)
+        matchLabel.font = UIFont(name: "Helvetica", size: 11)
         view.addSubview(matchLabel)
         matchLabel.translatesAutoresizingMaskIntoConstraints = false
+        matchLabel.numberOfLines = 0
         view.addConstraints([
             matchLabel.topAnchor.constraint(equalTo: loginContainer.bottomAnchor, constant: 5),
-            matchLabel.leftAnchor.constraint(equalTo: loginContainer.leftAnchor)
+            matchLabel.leftAnchor.constraint(equalTo: loginContainer.leftAnchor),
+            matchLabel.widthAnchor.constraint(equalTo: loginContainer.widthAnchor)
         ])
         
     }
@@ -133,6 +139,7 @@ class LoginViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         navigationController?.setNavigationBarHidden(false, animated: true)
+//        navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = .lightGray
     }
     

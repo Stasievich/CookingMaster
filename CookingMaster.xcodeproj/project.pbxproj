@@ -9,11 +9,14 @@
 /* Begin PBXBuildFile section */
 		575FFBC425D42923007E681D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 575FFBC325D42923007E681D /* GoogleService-Info.plist */; };
 		575FFC0425D8464A007E681D /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC0325D8464A007E681D /* SignUpViewController.swift */; };
-		575FFC1925D884E1007E681D /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC1825D884E1007E681D /* UITextFieldExtension.swift */; };
+		575FFC1925D884E1007E681D /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC1825D884E1007E681D /* TextField.swift */; };
 		575FFC3025D97242007E681D /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC2F25D97242007E681D /* FirebaseManager.swift */; };
 		575FFC4525DABB1A007E681D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FFC4425DABB1A007E681D /* LoginViewController.swift */; };
 		57A129A325E477F7009173A5 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A129A225E477F7009173A5 /* UIViewExtension.swift */; };
 		57A129A625E556D1009173A5 /* CurrentUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A129A525E556D1009173A5 /* CurrentUserViewController.swift */; };
+		57A129AD25E70C47009173A5 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A129AC25E70C47009173A5 /* UIColorExtension.swift */; };
+		57A129B025E71318009173A5 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A129AF25E71318009173A5 /* UIButtonExtension.swift */; };
+		57A129B425E74DA2009173A5 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A129B325E74DA2009173A5 /* UIViewControllerExtension.swift */; };
 		57C291F025B97929003E1164 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C291EF25B97929003E1164 /* AppDelegate.swift */; };
 		57C291F225B97929003E1164 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C291F125B97929003E1164 /* SceneDelegate.swift */; };
 		57C291F725B97929003E1164 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C291F525B97929003E1164 /* Main.storyboard */; };
@@ -38,11 +41,14 @@
 		4F63AE05EB9B8DA79C249885 /* Pods-CookingMaster.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CookingMaster.release.xcconfig"; path = "Target Support Files/Pods-CookingMaster/Pods-CookingMaster.release.xcconfig"; sourceTree = "<group>"; };
 		575FFBC325D42923007E681D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		575FFC0325D8464A007E681D /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
-		575FFC1825D884E1007E681D /* UITextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
+		575FFC1825D884E1007E681D /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		575FFC2F25D97242007E681D /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		575FFC4425DABB1A007E681D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		57A129A225E477F7009173A5 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		57A129A525E556D1009173A5 /* CurrentUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserViewController.swift; sourceTree = "<group>"; };
+		57A129AC25E70C47009173A5 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		57A129AF25E71318009173A5 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
+		57A129B325E74DA2009173A5 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		57C291EC25B97929003E1164 /* CookingMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookingMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C291EF25B97929003E1164 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57C291F125B97929003E1164 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -81,9 +87,12 @@
 		575FFC1B25D88B7B007E681D /* UIExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				575FFC1825D884E1007E681D /* UITextFieldExtension.swift */,
+				575FFC1825D884E1007E681D /* TextField.swift */,
 				57C2920B25B98E84003E1164 /* UIControlExtension.swift */,
 				57A129A225E477F7009173A5 /* UIViewExtension.swift */,
+				57A129AC25E70C47009173A5 /* UIColorExtension.swift */,
+				57A129AF25E71318009173A5 /* UIButtonExtension.swift */,
+				57A129B325E74DA2009173A5 /* UIViewControllerExtension.swift */,
 			);
 			path = UIExtensions;
 			sourceTree = "<group>";
@@ -308,9 +317,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				575FFC4525DABB1A007E681D /* LoginViewController.swift in Sources */,
+				57A129B025E71318009173A5 /* UIButtonExtension.swift in Sources */,
 				575FFC3025D97242007E681D /* FirebaseManager.swift in Sources */,
 				575FFC0425D8464A007E681D /* SignUpViewController.swift in Sources */,
-				575FFC1925D884E1007E681D /* UITextFieldExtension.swift in Sources */,
+				575FFC1925D884E1007E681D /* TextField.swift in Sources */,
+				57A129AD25E70C47009173A5 /* UIColorExtension.swift in Sources */,
 				57E617E225C7110F00E31EB2 /* IngredientsData.swift in Sources */,
 				57C2921825BD7E52003E1164 /* RecipesViewController.swift in Sources */,
 				57C2921E25BD981A003E1164 /* FavoritesViewController.swift in Sources */,
@@ -319,6 +330,7 @@
 				57C2920925B98157003E1164 /* APIStructures.swift in Sources */,
 				57C291F025B97929003E1164 /* AppDelegate.swift in Sources */,
 				57C2921525BD7DEC003E1164 /* IngredientsViewController.swift in Sources */,
+				57A129B425E74DA2009173A5 /* UIViewControllerExtension.swift in Sources */,
 				57C82A9A25E28A4D00988CB9 /* RecipeDescriptionViewController.swift in Sources */,
 				57C82A8F25E08BB100988CB9 /* DBParser.swift in Sources */,
 				57C2920625B97BB1003E1164 /* FoodAPI.swift in Sources */,

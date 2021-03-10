@@ -12,13 +12,15 @@ import Firebase
 class CurrentUserViewController: UIViewController {
     var productLabel = UILabel()
     var emailTextField = TextField()
+    var appTitleLabel = UILabel()
     
     var signOutButton = UIButton(type: .system)
     var changePasswordButton = UIButton(type: .system)
     
     override func viewDidLoad () {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(cgColor: CGColor(gray: 0.7, alpha: 1))
+        self.addBackButton()
         
         if let userEmail = Auth.auth().currentUser?.email {
             emailTextField.text = "\(userEmail)"
@@ -42,7 +44,19 @@ class CurrentUserViewController: UIViewController {
         emailTextField.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         emailTextField.autocorrectionType = .no
         
-        
+        view.addSubview(appTitleLabel)
+        let str = "CookingMaster"
+        let titleString = NSMutableAttributedString(string: str, attributes: [NSAttributedString.Key.font: UIFont(name: "GillSans-Bold", size: 26)!])
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: #colorLiteral(red: 0.8284265995, green: 0.2433997393, blue: 0.5355008841, alpha: 1), range: NSRange(location:0,length:7))
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.Theme.mainColor, range: NSRange(location:7,length:str.count - 7))
+        appTitleLabel.attributedText = titleString
+        appTitleLabel.textAlignment = .center
+        appTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints([
+            appTitleLabel.widthAnchor.constraint(equalTo: emailTextField.widthAnchor),
+            appTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            appTitleLabel.bottomAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -20)
+        ])
         
         signOutButton.setTitle("Sign out", for: .normal)
         view.addSubview(signOutButton)
@@ -53,7 +67,7 @@ class CurrentUserViewController: UIViewController {
             signOutButton.widthAnchor.constraint(equalTo: emailTextField.widthAnchor),
             signOutButton.heightAnchor.constraint(equalTo: emailTextField.heightAnchor)
         ])
-        signOutButton.backgroundColor = .green
+        signOutButton.backgroundColor = UIColor.Theme.buttonColor
         signOutButton.setTitleColor(.white, for: .normal)
         
         signOutButton.addAction(for: .touchUpInside) { (signOutButton) in
@@ -61,17 +75,23 @@ class CurrentUserViewController: UIViewController {
             do {
                 try Auth.auth().signOut()
                 FavouriteRecipes.shared.recipes.removeAll()
-                let favoritesTab = FavoritesViewController()
-                favoritesTab.navigationController?.isNavigationBarHidden = true
-                favoritesTab.tabBarItem.title = "Favorites111"
-                favoritesTab.tabBarItem.image = UIImage(named: "favorite")
-//                let tab = UIApplication.shared.windows.first?.rootViewController?.children.first
-//                tab?.addChild(favoritesTab)
-//                self.navigationController?.viewControllers.first?.children
-                self.navigationController?.viewControllers.first?.children[2].removeFromParent()
-                self.navigationController?.viewControllers.first?.addChild(favoritesTab)
+                SharedRecipes.sharedInstance.recipes.removeAll()
+                let ingredientsTab = IngredientsViewController()
+                ingredientsTab.tabBarItem.title = "Ingredients"
+                ingredientsTab.tabBarItem.image = UIImage(named: "fridge")
                 
-//                self.navigationController?.topViewController?.tabBarController?.viewControllers?.remove(at: 2)
+                let recipesTab = RecipesViewController()
+                recipesTab.tabBarItem.title = "Recipes"
+                recipesTab.tabBarItem.image = UIImage(named: "recipe-book")
+                
+                let favoritesTab = FavoritesViewController()
+                favoritesTab.tabBarItem.title = "Favorites"
+                favoritesTab.tabBarItem.image = UIImage(named: "favorite")
+                
+                let tabBarVC = self.navigationController?.viewControllers.first as! UITabBarController
+                tabBarVC.viewControllers = [ingredientsTab, recipesTab, favoritesTab]
+                tabBarVC.selectedIndex = 0
+                
                 self.navigationController?.popToRootViewController(animated: true)
             } catch let signOutError as NSError {
                 print ("Error signing out: %@", signOutError)
@@ -95,21 +115,8 @@ class CurrentUserViewController: UIViewController {
             
             if let userEmail = Auth.auth().currentUser?.email {
                 Auth.auth().sendPasswordReset(withEmail: userEmail) { error in
-                    let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-                                                    switch action.style{
-                                                    case .default:
-                                                        print("default")
-                                                        
-                                                    case .cancel:
-                                                        print("cancel")
-                                                        
-                                                    case .destructive:
-                                                        print("destructive")
-                                                        
-                                                    @unknown default:
-                                                        print("unknown default")
-                                                    }}))
+                    let alert = UIAlertController(title: "CookingMaster", message: "Please check your inbox for a password reset email.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
                     self.present(alert, animated: true, completion: nil)
                 }
                 

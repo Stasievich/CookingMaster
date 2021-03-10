@@ -12,7 +12,8 @@ class FavoritesViewController: UIViewController {
     var headerText = UILabel()
     var recipesContainer = UIView()
     var promptForSignUpLabel = UILabel()
-    var signUpButton = UIButton(type: .system)
+    var recipeBookImage = UIImageView()
+    var signUpButton = UIButton()
     var userButton = UIButton(type: .system)
     
     var recipesTableView = UITableView.init(frame: .zero, style: .grouped)
@@ -25,7 +26,7 @@ class FavoritesViewController: UIViewController {
         
         navigationController?.isNavigationBarHidden = true
         
-        view.backgroundColor = .red
+        view.backgroundColor = UIColor.Theme.mainColor
         
         headerText.text = "Favourites"
         headerText.font = UIFont(name: "Helvetica", size: 30)
@@ -75,6 +76,16 @@ class FavoritesViewController: UIViewController {
         
         if Auth.auth().currentUser == nil {
             
+            recipeBookImage.translatesAutoresizingMaskIntoConstraints = false
+            recipeBookImage.image = UIImage(named: "recipeBook")
+            recipesContainer.addSubview(recipeBookImage)
+            recipesContainer.addConstraints([
+                recipeBookImage.topAnchor.constraint(equalTo: recipesContainer.topAnchor, constant: 60),
+                recipeBookImage.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
+                recipeBookImage.widthAnchor.constraint(equalToConstant: view.frame.width / 4),
+                recipeBookImage.heightAnchor.constraint(equalToConstant: view.frame.width / 4)
+            ])
+            
             promptForSignUpLabel.translatesAutoresizingMaskIntoConstraints = false
             promptForSignUpLabel.text = "Only registered users can save recipes"
             promptForSignUpLabel.font = UIFont(name: "Helvetica", size: 14)
@@ -82,17 +93,20 @@ class FavoritesViewController: UIViewController {
             promptForSignUpLabel.textAlignment = .center
             recipesContainer.addSubview(promptForSignUpLabel)
             recipesContainer.addConstraints([
-                promptForSignUpLabel.topAnchor.constraint(equalTo: recipesContainer.topAnchor, constant: 60),
+                promptForSignUpLabel.topAnchor.constraint(equalTo: recipeBookImage.bottomAnchor, constant: 20),
                 promptForSignUpLabel.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
                 promptForSignUpLabel.widthAnchor.constraint(equalToConstant: 140.0)
             ])
             
             signUpButton.translatesAutoresizingMaskIntoConstraints = false
             signUpButton.setTitle("Sign Up", for: .normal)
+            signUpButton.titleLabel?.textAlignment = .center
+            signUpButton.setButtonToMainTheme()
             recipesContainer.addSubview(signUpButton)
             recipesContainer.addConstraints([
                 signUpButton.centerXAnchor.constraint(equalTo: recipesContainer.centerXAnchor),
-                signUpButton.topAnchor.constraint(equalTo: promptForSignUpLabel.bottomAnchor, constant: 20)
+                signUpButton.topAnchor.constraint(equalTo: promptForSignUpLabel.bottomAnchor, constant: 20),
+                signUpButton.widthAnchor.constraint(equalToConstant: 150)
             ])
             
             signUpButton.addAction(for: .touchUpInside) { (signUpButton) in
@@ -128,6 +142,7 @@ class FavoritesViewController: UIViewController {
             recipesTableView.showsVerticalScrollIndicator = false
             recipesTableView.register(FavoritesTableViewCell.self, forCellReuseIdentifier: self.cellReuseIdentifier)
             recipesTableView.dataSource = self
+            recipesTableView.delegate = self
             
             
         }
@@ -137,6 +152,39 @@ class FavoritesViewController: UIViewController {
         super.viewDidLoad()
     }
 }
+
+extension FavoritesViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        FoodAPI.shared.getRecipeInformation(recipeId: FavouriteRecipes.shared.recipes[indexPath.section]["id"] as! Int) { (data, error) in
+            guard let data = data else  { return }
+            
+            do {
+                let getRecipeInfo = try JSONDecoder().decode(RecipeDescription.self, from: data)
+                print(getRecipeInfo)
+                DispatchQueue.main.async {
+                    
+                    let recipeDescription = RecipeDescriptionViewController()
+                    if let description = getRecipeInfo.instructions {
+                        recipeDescription.recipeDescription = description
+                    }
+                    else {
+                        recipeDescription.recipeDescription = getRecipeInfo.sourceUrl
+                    }
+                    recipeDescription.recipeName = getRecipeInfo.title
+                    recipeDescription.recipeImageName = getRecipeInfo.image
+                    recipeDescription.recipeStringTags = getRecipeInfo.getPositiveTags()
+                    
+                    self.navigationController?.pushViewController(recipeDescription, animated: true)
+                }
+            }
+            catch {
+                print(error)
+            }
+        }
+    }
+}
+
 
 extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -178,7 +226,7 @@ extension FavoritesViewController: UITableViewDataSource {
         return 1
     }
     
-    private func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    internal func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return .leastNormalMagnitude
     }
     
@@ -191,11 +239,12 @@ class FavoritesTableViewCell: UITableViewCell {
     let indent: CGFloat = 12
     let cellHeight: CGFloat = 140
     var favorite: Bool = false
+    let reuseId = "cell"
     
     var deleteButton: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setBackgroundImage(UIImage(named: "trash"), for: .normal)
+        btn.setBackgroundImage(UIImage(named: "trash")?.withTintColor(UIColor.Theme.mainColor), for: .normal)
         return btn
     }()
     
@@ -209,7 +258,7 @@ class FavoritesTableViewCell: UITableViewCell {
     
     var recipeName: UILabel = {
         let lbl = UILabel()
-        lbl.font = UIFont(name: "AppleSDGothicNeo", size: 18)
+        lbl.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 18)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.numberOfLines = 0
         return lbl
@@ -220,6 +269,7 @@ class FavoritesTableViewCell: UITableViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -229,10 +279,14 @@ class FavoritesTableViewCell: UITableViewCell {
         mainCellView.layer.cornerRadius = 8
         recipeImage.layer.cornerRadius = 8
         recipeImage.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        
+        
         self.contentView.addSubview(mainCellView)
         mainCellView.addSubview(recipeImage)
         mainCellView.addSubview(recipeName)
         mainCellView.addSubview(deleteButton)
+        
+        
         
         contentView.addConstraints([
             mainCellView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: indent),
@@ -250,12 +304,14 @@ class FavoritesTableViewCell: UITableViewCell {
         
         mainCellView.addConstraints([
             recipeName.leadingAnchor.constraint(equalTo: recipeImage.trailingAnchor, constant: 20),
-            recipeName.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -20)
+            recipeName.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -30),
+            recipeName.topAnchor.constraint(equalTo: mainCellView.topAnchor, constant: 5)
         ])
         
+        
         mainCellView.addConstraints([
-            deleteButton.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor),
-            deleteButton.topAnchor.constraint(equalTo: mainCellView.topAnchor),
+            deleteButton.trailingAnchor.constraint(equalTo: mainCellView.trailingAnchor, constant: -5),
+            deleteButton.topAnchor.constraint(equalTo: mainCellView.topAnchor, constant: 5),
             deleteButton.heightAnchor.constraint(equalToConstant: 20),
             deleteButton.widthAnchor.constraint(equalToConstant: 20)
         ])
@@ -265,3 +321,5 @@ class FavoritesTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+

@@ -23,7 +23,7 @@ class FoodAPI {
         
         components.queryItems = [
             URLQueryItem(name: "ingredients", value: ingredients.joined(separator: ",")),
-            URLQueryItem(name: "number", value: "5"),
+            URLQueryItem(name: "number", value: "10"),
             URLQueryItem(name: "ranking", value: "1"),
             URLQueryItem(name: "ignorePantry", value: "true")
         ]

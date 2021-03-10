@@ -43,10 +43,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [ingredientsTab, recipesTab, favoritesTab]
+        tabBarController.tabBar.tintColor = UIColor.Theme.mainColor
         tabBarController.selectedIndex = 0
         tabBarController.tabBar.backgroundColor = .white
         
-        window?.rootViewController = UINavigationController(rootViewController: tabBarController)
+        let rootViewController = UINavigationController(rootViewController: tabBarController)
+        rootViewController.navigationBar.prefersLargeTitles = true
+        
+        rootViewController.addBackButton()
+        window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
     }
 
